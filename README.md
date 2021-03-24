@@ -1,5 +1,11 @@
 # Spring-EveryTime-Android
-``` yml
+### DB Setting
+```
+create user 'everytime'@'%' identified by 'bitc5600';
+GRANT ALL PRIVILEGES ON *.* TO 'everytime'@'%';
+create database everytime;
+```
+``` 
 server:
   port: 8000
   servlet:
