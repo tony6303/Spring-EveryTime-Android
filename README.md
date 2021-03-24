@@ -1,4 +1,19 @@
 # Spring-EveryTime-Android
+``` yml
+server:
+  port: 8000
+  servlet:
+    context-path: /
+    
+spring:
+      
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/everytime?serverTimezone=Asia/Seoul
+    username: everytime
+    password: bitc5600
+```
+
 
 구현된 기능  
 회원가입 ( SignUp )  
