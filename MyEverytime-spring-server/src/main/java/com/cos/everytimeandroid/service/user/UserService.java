@@ -27,7 +27,9 @@ public class UserService {
 	}
 
 	public User 로그인(LoginDto loginDto) {
-		System.out.println("input값: " +loginDto.getLoginUsername() + loginDto.getLoginPw());
+		System.out.println("input값 LoginUsername: " +loginDto.getLoginUsername());
+		System.out.println("input값 LoginPw: " +loginDto.getLoginPw());
+		
 		User loginDtoEntity = userRepository.findByUsernameAndPassword(loginDto.getLoginUsername(), loginDto.getLoginPw());
 		return loginDtoEntity;
 	}

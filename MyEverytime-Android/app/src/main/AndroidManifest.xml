@@ -3,7 +3,7 @@
     package="com.example.myeverytime">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyEverytime"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".main.boards.in_post.InPostActivity"
+            >
+        </activity>
+        <activity android:name=".main.boards.writing.WritingActivity" />
+        <activity android:name=".main.boards.freeboard.FreeBoardActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".signUp.SignUpInputFormActivity" />
         <activity android:name=".signIn.SignInActivity">
             <intent-filter>

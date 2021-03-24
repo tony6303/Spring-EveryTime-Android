@@ -2,13 +2,12 @@ package com.example.myeverytime.signIn;
 
 import android.util.Log;
 
+import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.signIn.interfaces.SignInActivityView;
 import com.example.myeverytime.signIn.interfaces.SignInRetrofitInterface;
 import com.example.myeverytime.signIn.model.SignInDto;
-import com.example.myeverytime.signIn.model.SignInRespDto;
 
 import static com.example.myeverytime.ApplicationClass.getRetrofit;
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,12 +25,13 @@ public class SignInService {
     }
 
     public void postSignIn(SignInDto signInDto) {
+        // getRetrofit 사용하려면 import static 해줘야 합니다.
         signInRetrofitInterface = getRetrofit().create(SignInRetrofitInterface.class);
-        Call<SignInRespDto<SignInDto>> signInCall = signInRetrofitInterface.signIn(signInDto);
-        signInCall.enqueue(new Callback<SignInRespDto<SignInDto>>() {
+        Call<CMRespDto<SignInDto>> signInCall = signInRetrofitInterface.signIn(signInDto);
+        signInCall.enqueue(new Callback<CMRespDto<SignInDto>>() {
             @Override
-            public void onResponse(Call<SignInRespDto<SignInDto>> call, Response<SignInRespDto<SignInDto>> response) {
-                final SignInRespDto signInRespDto = response.body();
+            public void onResponse(Call<CMRespDto<SignInDto>> call, Response<CMRespDto<SignInDto>> response) {
+                CMRespDto signInRespDto = response.body();
 
                 if (signInRespDto.getData() == null) {
                     Log.d(TAG, "onResponse: " + signInRespDto);
@@ -47,7 +47,7 @@ public class SignInService {
             }
 
             @Override
-            public void onFailure(Call<SignInRespDto<SignInDto>> call, Throwable t) {
+            public void onFailure(Call<CMRespDto<SignInDto>> call, Throwable t) {
                 mSignInActivityView.validateFailure(null);
                 Log.d(TAG, "onFailure: 로그인 구조적으로 실패");
             }

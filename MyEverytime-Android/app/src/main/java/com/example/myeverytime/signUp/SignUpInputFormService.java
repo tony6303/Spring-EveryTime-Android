@@ -3,10 +3,10 @@ package com.example.myeverytime.signUp;
 import android.util.Log;
 
 import com.example.myeverytime.BaseActivity;
+import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormActivityView;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormRetrofitInterface;
 import com.example.myeverytime.signUp.model.SignUpDto;
-import com.example.myeverytime.signUp.model.SignUpRespDto;
 
 import java.util.HashMap;
 
@@ -29,12 +29,13 @@ public class SignUpInputFormService extends BaseActivity {
 
 
     public void postSignUp(SignUpDto signUpDto) {
+        // getRetrofit 사용하려면 import static 해줘야 합니다.
         signUpInputFormRetrofitInterface = getRetrofit().create(SignUpInputFormRetrofitInterface.class);
-        Call<SignUpRespDto<SignUpDto>> signUpCall = signUpInputFormRetrofitInterface.save(signUpDto);
-        signUpCall.enqueue(new Callback<SignUpRespDto<SignUpDto>>() {
+        Call<CMRespDto<SignUpDto>> signUpCall = signUpInputFormRetrofitInterface.save(signUpDto);
+        signUpCall.enqueue(new Callback<CMRespDto<SignUpDto>>() {
             @Override
-            public void onResponse(Call<SignUpRespDto<SignUpDto>> call, Response<SignUpRespDto<SignUpDto>> response) {
-                final SignUpRespDto signUpRespDto = response.body();
+            public void onResponse(Call<CMRespDto<SignUpDto>> call, Response<CMRespDto<SignUpDto>> response) {
+                CMRespDto signUpRespDto = response.body();
                 if (signUpRespDto == null) {
                     Log.d(TAG, "onResponse: 회원가입 실패");
                     mSignUpInputFormActivity_View.validateFailure(null);
@@ -46,7 +47,7 @@ public class SignUpInputFormService extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<SignUpRespDto<SignUpDto>> call, Throwable t) {
+            public void onFailure(Call<CMRespDto<SignUpDto>> call, Throwable t) {
                 mSignUpInputFormActivity_View.validateFailure(null);
                 Log.d(TAG, "onResponse: 회원가입 구조적으로 실패 " + t.getMessage());
             }

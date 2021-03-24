@@ -1,11 +1,11 @@
 package com.example.myeverytime.signUp.interfaces;
 
-import com.example.myeverytime.signUp.model.SignUpRespDto;
+import com.example.myeverytime.CMRespDto;
 
 public interface SignUpInputFormActivityView {
     void validateSuccess(String text);
 
     void validateFailure(String message);
 
-    void signUpSuccess(SignUpRespDto signUpRespDto);
+    void signUpSuccess(CMRespDto cmRespDto);
 }

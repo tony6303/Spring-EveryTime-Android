@@ -1,15 +1,23 @@
-package com.example.myeverytime.signUp.model;
+package com.example.myeverytime;
 
-public class SignUpRespDto<T> {
+public class CMRespDto<T> {
     private int code;
     private T data;
 
-    public SignUpRespDto(int code, T data) {
+    public CMRespDto(int code, T data) {
         this.code = code;
         this.data = data;
     }
 
-    public SignUpRespDto() {
+    @Override
+    public String toString() {
+        return "CMRespDto{" +
+                "code=" + code +
+                ", data=" + data +
+                '}';
+    }
+
+    public CMRespDto() {
     }
 
     public int getCode() {

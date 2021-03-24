@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +32,8 @@ public class User {
 	private String userRole;
 	private String university;
 	private Integer entranceYear;
+	
+	@CreationTimestamp
 	private Timestamp createDate;
 	
 }
