@@ -116,7 +116,6 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
 
     @Override
     public void signUpSuccess(CMRespDto cmRespDto) {
-        showCustomToast(String.valueOf(cmRespDto.getCode()));
         switch (cmRespDto.getCode()) {
             case 100:
                 AlertDialog.Builder builder = new AlertDialog.Builder(SignUpInputFormActivity.this);

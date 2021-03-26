@@ -28,10 +28,12 @@ spring:
 구현된 기능  
 회원가입 ( SignUp )  
 로그인 ( SignIn ) 
+로그인정보 기억하기 ( SharedPreference )  
   
-두 번째 커밋  
+두 번째 커밋 ( retrofit Call 함수 이름 )  
 글 전체 조회 ( getFreeBoard )  
 글 한 개 조회 ( getOneFreeBoard )  
 글 저장 ( saveFreeBoard )  
 글 삭제 ( deleteOneFreeBoard )  
+글 수정 ( updateFreeBoard )
 
