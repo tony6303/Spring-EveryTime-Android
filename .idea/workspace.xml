@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8dd61af5-5096-437f-abb7-020b3239ea3a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/MyEverytime-Android/app/src/main/java/com/example/myeverytime/main/boards/in_post/InPostActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/MyEverytime-Android/app/src/main/java/com/example/myeverytime/main/boards/in_post/InPostActivity.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1qHV7an4aj5pmJXutgKpGwbl4PX" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8dd61af5-5096-437f-abb7-020b3239ea3a" name="Default Changelist" comment="" />
+      <created>1616736336116</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1616736336116</updated>
+    </task>
+    <servers />
+  </component>
+</project>

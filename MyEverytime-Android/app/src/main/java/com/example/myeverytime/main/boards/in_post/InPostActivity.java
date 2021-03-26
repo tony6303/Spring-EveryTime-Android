@@ -4,6 +4,7 @@ package com.example.myeverytime.main.boards.in_post;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.example.myeverytime.R;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostActivityView;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostRetrofitInterface;
 import com.example.myeverytime.main.boards.model.PostItem;
+import com.example.myeverytime.main.boards.updating.UpdatingActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,7 +35,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
     private static final String TAG = "InPostActivity";
     private InPostRetrofitInterface inPostRetrofitInterface;
-    private final InPostActivityView mInpostActivityView;
+    private InPostActivityView mInpostActivityView;
 //    private ArrayList<CommentItem> m_comment_item_list;
 
 //    private CommentAdapter comment_adapter;
@@ -64,6 +66,9 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
     private Long id;
 
+    public InPostActivity() {
+    }
+
     public InPostActivity(InPostActivityView mInpostActivityView) {
         this.mInpostActivityView = mInpostActivityView;
     }
@@ -78,6 +83,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
         Intent intent = getIntent();
         id = intent.getLongExtra("freeBoardId", 0);
+
         Log.d(TAG, "onCreate: item의 실제 Id 받았어요 :" + id);
 //        String title = intent.getExtras().getString("freeBoardTitle");
 //        String content = intent.getExtras().getString("freeBoardContent");
@@ -172,32 +178,13 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 // todo 글 수정 마저 만들기 ~!
             case R.id.post_update:
                 Log.d(TAG, "onMenuItemClick: 글 수정 버튼 누름");
-                AlertDialog.Builder dlg2 = new AlertDialog.Builder(InPostActivity.this);
-                dlg2.setTitle("에브리타임");
-                dlg2.setMessage("글을 삭제 하시겠습니까?");
-                dlg2.setPositiveButton("삭제", (dialog, which) -> {
-                    Log.d(TAG, "onMenuItemClick: 삭제 버튼");
-                    inPostRetrofitInterface = getRetrofit().create(InPostRetrofitInterface.class);
-                    Call<Void> deleteOneFreeBoardCall = inPostRetrofitInterface.deleteOneFreeBoard(id);
-                    deleteOneFreeBoardCall.enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            mInpostActivityView.freeBoardDeleteSuccess();
-                            Log.d(TAG, "onResponse: 글 삭제  성공");
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            Log.d(TAG, "onFailure: 글 삭제 구조적으로 실패" + t.getMessage());
-                        }
-                    });
-
-                }) // dlg setPositive End
-                        .setNegativeButton("취소", (dialog, which) -> {
-                            Log.d(TAG, "onMenuItemClick: 취소 버튼");
-                            dialog.cancel();
-                        });
-                dlg2.show();
+                Intent intent = new Intent(InPostActivity.this, UpdatingActivity.class);
+                intent.putExtra("boardName", 1);
+                intent.putExtra("freeBoardId", id);
+                intent.putExtra("title", tv_in_post_title.getText());
+                intent.putExtra("content", tv_in_post_content.getText());
+                startActivity(intent);
+                finish();
 
                 return true;
             default:
@@ -224,7 +211,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
                 tv_in_post_nickname.setText(postItem.getWriter());
                 tv_in_post_time.setText(postItem.getTime().substring(0,16));
-                tv_in_post_title.setText(postItem.getTitle() + "가져온거 맞음");
+                tv_in_post_title.setText(postItem.getTitle());
                 tv_in_post_content.setText(postItem.getContent());
                 // LikeNum , commentNum 아직 추가 안했음.
                 break;
@@ -237,14 +224,22 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
     @Override
     public void freeBoardDeleteSuccess() {
         // todo 삭제 했으니 freeboardActivity 로 이동
-
-                Log.d(TAG, "freeBoardDeleteSuccess: 삭제 버튼 성공 !!!");
-
+        Log.d(TAG, "freeBoardDeleteSuccess: 삭제 버튼 성공 !!!");
+        finish();
 
     }
 
     @Override
     public void freeBoardUpdateSuccess(CMRespDto cmRespDto) {
         // todo 수정 했으니 freeboardActivity 로 이동 또는 원래 게시물 다시 시작
+        Log.d(TAG, "freeBoardUpdateSuccess:  수정 성공");
+        restartActivity(InPostActivity.this);
+    }
+
+    private void restartActivity(Activity activity) {
+        Intent intent = new Intent();
+        intent.setClass(activity, activity.getClass());
+        activity.startActivity(intent);
+        activity.finish();
     }
 }

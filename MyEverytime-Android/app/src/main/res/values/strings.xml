@@ -157,6 +157,9 @@
     <string name="activity_in_post_comment_num">0</string>
     <string name="activity_in_post_scrap_num">0</string>
 
+    <!-- activity_updating (글 수정 화면) -->
+    <string name="activity_updating_updating">글 수정</string>
+
     <!--    activity_writing (글 작성 화면)-->
     <string name="activity_writing_writing">글 쓰기</string>
     <string name="activity_writing_btn_complete">완료</string>

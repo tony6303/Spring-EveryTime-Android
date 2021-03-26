@@ -17,5 +17,5 @@ public interface FreeBoardRetrofitInterface {
     Call<CMRespDto<List<PostItem>>> getFreeBoard();
 
     @POST("board")
-    Call<CMRespDto<PostItem>> saveFreeboard(@Body PostItem postItem);
+    Call<CMRespDto<WritingDto>> saveFreeboard(@Body WritingDto writingDto);
 }
