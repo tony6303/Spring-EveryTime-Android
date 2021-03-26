@@ -37,7 +37,6 @@ public class SignInService {
                     Log.d(TAG, "onResponse: " + signInRespDto);
                     Log.d(TAG, "onResponse: 로그인 실패");
                     mSignInActivityView.validateFailure(null);
-
                     return;
                 }
                 Log.d(TAG, "onResponse: " + signInRespDto);

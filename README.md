@@ -1,4 +1,8 @@
 # Spring-EveryTime-Android
+
+### 시연영상  
+https://youtu.be/AfCitIk8Dag
+
 ### DB Setting
 ```
 create user 'everytime'@'%' identified by 'bitc5600';

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.myeverytime.BaseActivity;
 import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.R;
+import com.example.myeverytime.main.boards.freeboard.FreeBoardActivity;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostActivityView;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostRetrofitInterface;
 import com.example.myeverytime.main.boards.model.PostItem;
@@ -73,6 +74,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         this.mInpostActivityView = mInpostActivityView;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,8 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         switch (view.getId()) {
             case R.id.btn_in_post_go_back:
                 Log.d(TAG, "customOnClick:  inpost 에서 뒤로가기 누름");
+                Intent intent = new Intent(InPostActivity.this, FreeBoardActivity.class);
+                startActivity(intent);
                 finish();
                 break;
             case R.id.btn_in_post_more:
@@ -157,8 +161,13 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                     deleteOneFreeBoardCall.enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            mInpostActivityView.freeBoardDeleteSuccess();
+                            // 자꾸 mInpostActivityView가 null이라는 런타임에러가 발생해서 그냥 사용안함 (원인을 모르겠어서)
+                            // mInpostActivityView.freeBoardDeleteSuccess();
+                            Intent intent = new Intent(InPostActivity.this, FreeBoardActivity.class);
+                            startActivity(intent);
+                            finish();
                             Log.d(TAG, "onResponse: 글 삭제  성공");
+                            showCustomToast("글 삭제 성공");
                         }
 
                         @Override
@@ -222,18 +231,11 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
     }
 
     @Override
-    public void freeBoardDeleteSuccess() {
-        // todo 삭제 했으니 freeboardActivity 로 이동
-        Log.d(TAG, "freeBoardDeleteSuccess: 삭제 버튼 성공 !!!");
-        finish();
-
-    }
-
-    @Override
     public void freeBoardUpdateSuccess(CMRespDto cmRespDto) {
         // todo 수정 했으니 freeboardActivity 로 이동 또는 원래 게시물 다시 시작
         Log.d(TAG, "freeBoardUpdateSuccess:  수정 성공");
-        restartActivity(InPostActivity.this);
+        showCustomToast("글 수정 성공");
+        //restartActivity(InPostActivity.this);
     }
 
     private void restartActivity(Activity activity) {

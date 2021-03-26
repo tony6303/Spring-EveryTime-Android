@@ -83,7 +83,6 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
 
                     //postItem.setContent_index(cmRespDto.getData().get(i).getContentIdx());
                     postItem.setId(getPostItemData.getId());
-                    Log.d(TAG, "boardSuccess: "+i+"번째 postItem의 id" + getPostItemData.getId());
                     postItem.setTitle(getPostItemData.getTitle());
                     postItem.setContent(getPostItemData.getContent());
                     postItem.setTime(getPostItemData.getTime());

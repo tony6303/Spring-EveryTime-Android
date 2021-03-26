@@ -128,6 +128,7 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Cust
 //                intent.putExtra("freeBoardWriter", getBoardWriter(getAdapterPosition()));
 //                intent.putExtra("freeBoardTime", getBoardTime(getAdapterPosition()));
                 mContext.startActivity(intent);
+                ((Activity)v.getContext()).finish();
 
 
             });
