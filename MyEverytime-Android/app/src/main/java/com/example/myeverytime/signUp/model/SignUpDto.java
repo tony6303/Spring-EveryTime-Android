@@ -13,10 +13,10 @@ public class SignUpDto {
     private String nickname;
     private String userRole;
     private String university;
-    private Integer entranceYear;
+    private String entranceYear;
     private Timestamp createDate;
 
-    public SignUpDto(String username, String password, String email, String nickname, String university, Integer entranceYear) {
+    public SignUpDto(String username, String password, String email, String nickname, String university, String entranceYear) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -84,11 +84,11 @@ public class SignUpDto {
         this.university = university;
     }
 
-    public Integer getEntranceYear() {
+    public String getEntranceYear() {
         return entranceYear;
     }
 
-    public void setEntranceYear(Integer entranceYear) {
+    public void setEntranceYear(String entranceYear) {
         this.entranceYear = entranceYear;
     }
 

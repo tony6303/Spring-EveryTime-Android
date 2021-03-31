@@ -36,7 +36,7 @@ public class SignInService {
                 if (signInRespDto.getData() == null) {
                     Log.d(TAG, "onResponse: " + signInRespDto);
                     Log.d(TAG, "onResponse: 로그인 실패");
-                    mSignInActivityView.validateFailure(null);
+                    mSignInActivityView.validateSuccess("아이디가 없거나 비밀번호가 틀립니다.");
                     return;
                 }
                 Log.d(TAG, "onResponse: " + signInRespDto);

@@ -85,7 +85,7 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
                     postItem.setId(getPostItemData.getId());
                     postItem.setTitle(getPostItemData.getTitle());
                     postItem.setContent(getPostItemData.getContent());
-                    postItem.setTime(getPostItemData.getTime());
+                    postItem.setCreateDate(getPostItemData.getCreateDate());
                     postItem.setWriter(getPostItemData.getWriter());
                     postItem.setLike_num(getPostItemData.getLike_num());
                     postItem.setComment_num(getPostItemData.getComment_num());
@@ -131,8 +131,6 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
                 startActivity(intent);
                 finish();
                 Log.d(TAG, "onMenuItemClick: 글쓰기 버튼 누름");
-                return true;
-            case R.id.remove_from_favorite:
                 return true;
             default:
                 return false;

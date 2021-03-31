@@ -10,7 +10,7 @@ public class PostItem {
     private Long id;
     private String title;
     private String content;
-    private String time;
+    private String createDate;
     private String writer;
     private int like_num;
     private int comment_num;
@@ -39,12 +39,12 @@ public class PostItem {
         this.content_index = content_index;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
-    public String getTime() {
-        return time;
+    public String getCreateDate() {
+        return createDate;
     }
 
     public String getTitle() {

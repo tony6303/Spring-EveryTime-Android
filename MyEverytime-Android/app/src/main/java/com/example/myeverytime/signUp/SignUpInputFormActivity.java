@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.myeverytime.BaseActivity;
 import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.MainActivity;
+import com.example.myeverytime.MainActivityForFragment;
 import com.example.myeverytime.R;
 import com.example.myeverytime.SharedPreference;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormActivityView;
@@ -68,7 +69,7 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
                     String inputEmail = et_signup2_email.getText().toString();
                     String inputNickName = et_signup2_nickName.getText().toString();
                     String inputUnivName = et_signup2_univName.getText().toString();
-                    int inputUnivYear = Integer.parseInt(et_signup2_univYear.getText().toString());
+                    String inputUnivYear = et_signup2_univYear.getText().toString();
 
                     tryPostSignUp(inputID, inputPW, inputEmail, inputNickName, inputUnivName, inputUnivYear);
                 }
@@ -86,7 +87,7 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
         initButton();
     }
 
-    private void tryPostSignUp(String userID, String userPW, String email, String userNickname, String univName, int univYear) {
+    private void tryPostSignUp(String userID, String userPW, String email, String userNickname, String univName, String univYear) {
         SignUpDto signUpDto = new SignUpDto(userID, userPW, email, userNickname, univName, univYear);
 
         SharedPreference.setAttribute(this, "nickname", signUpDto.getNickname());
@@ -123,7 +124,7 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SignUpInputFormActivity.this, MainActivity.class);
+                        Intent intent = new Intent(SignUpInputFormActivity.this, MainActivityForFragment.class);
                         startActivity(intent);
                         finish();
                     }

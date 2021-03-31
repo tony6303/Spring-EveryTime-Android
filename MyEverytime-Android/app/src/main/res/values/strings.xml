@@ -244,6 +244,10 @@
     <string name="frag_home_recent_lecture_review_4_subject">경제학이란 무엇인가</string>
     <string name="frag_home_recent_lecture_review_4_content">네 번째 강의평 네 번째 강의평 네 번째 강의평 네 번째 강의평 네 번째 강의평 네 번째 강의평 네 번째 강의평 네 번째 강의평</string>
     <string name="frag_home_btn_home_setting">홈 화면 설정</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>

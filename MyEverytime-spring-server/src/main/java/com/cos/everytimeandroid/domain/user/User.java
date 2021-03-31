@@ -2,6 +2,7 @@ package com.cos.everytimeandroid.domain.user;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,9 +24,11 @@ public class User {
 
 	@Id //pk
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // autoIncrease
-	private Long id;
+	private Integer id;
 	
+	@Column(unique = true)
 	private String username;
+	
 	private String password;
 	private String email;
 	private String nickname;	

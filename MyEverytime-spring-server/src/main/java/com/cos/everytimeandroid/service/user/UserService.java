@@ -33,4 +33,11 @@ public class UserService {
 		User loginDtoEntity = userRepository.findByUsernameAndPassword(loginDto.getLoginUsername(), loginDto.getLoginPw());
 		return loginDtoEntity;
 	}
+
+	public User 로그인정보가져오기(String username) {
+		System.out.println("로그인에 사용한 값: " + username);
+		
+		User userEntity = userRepository.findUserByUsername(username);
+		return userEntity;
+	}
 }

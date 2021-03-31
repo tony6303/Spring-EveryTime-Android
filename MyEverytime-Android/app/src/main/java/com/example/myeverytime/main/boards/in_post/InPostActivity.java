@@ -23,8 +23,12 @@ import com.example.myeverytime.R;
 import com.example.myeverytime.main.boards.freeboard.FreeBoardActivity;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostActivityView;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostRetrofitInterface;
+import com.example.myeverytime.main.boards.in_post.reply.ReplyAdapter;
+import com.example.myeverytime.main.boards.in_post.reply.model.Reply;
 import com.example.myeverytime.main.boards.model.PostItem;
 import com.example.myeverytime.main.boards.updating.UpdatingActivity;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,14 +41,13 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
     private static final String TAG = "InPostActivity";
     private InPostRetrofitInterface inPostRetrofitInterface;
     private InPostActivityView mInpostActivityView;
-//    private ArrayList<CommentItem> m_comment_item_list;
 
-//    private CommentAdapter comment_adapter;
+    private ArrayList<Reply> m_reply_item_list;
+    private RecyclerView rv_in_post_reply;
+    private ReplyAdapter reply_adapter;
+    private LinearLayoutManager linear_layout_manager;
 
     private CheckBox chk_in_post_anonymous;
-
-    private RecyclerView rv_in_post_comment;
-    private LinearLayoutManager linear_layout_manager;
 
     private TextView tv_in_post_nickname, tv_in_post_time, tv_in_post_title, tv_in_post_content, tv_in_post_like_num, tv_in_post_comment_num, tv_in_post_scrap_num;
 
@@ -65,7 +68,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
     private boolean m_from_frag_home;
 
-    private Long id;
+    private Long id; // 삭제, 수정 하기위해서 어댑터에서 intent로 받아온 id
 
     public InPostActivity() {
     }
@@ -80,7 +83,21 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_post);
 
-        inPostService = new InPostService(this);
+        m_reply_item_list = new ArrayList<>();
+        for(int i=0; i<5; i++){
+            m_reply_item_list.add(new Reply("익명","댓글내용"+i,"8분전"));
+        }
+
+        reply_adapter = new ReplyAdapter(m_reply_item_list);
+        rv_in_post_reply = findViewById(R.id.rv_board_reply_list);
+
+        linear_layout_manager = new LinearLayoutManager(getApplicationContext());
+        rv_in_post_reply.setLayoutManager(linear_layout_manager);
+
+        rv_in_post_reply.setAdapter(reply_adapter);
+
+
+
         ViewBinding();
 
         Intent intent = getIntent();
@@ -184,7 +201,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 dlg.show();
 
                 return true;
-                // todo 글 수정 마저 만들기 ~!
+
             case R.id.post_update:
                 Log.d(TAG, "onMenuItemClick: 글 수정 버튼 누름");
                 Intent intent = new Intent(InPostActivity.this, UpdatingActivity.class);
@@ -219,9 +236,10 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 PostItem postItem = (PostItem)cmRespDto.getData();
 
                 tv_in_post_nickname.setText(postItem.getWriter());
-                tv_in_post_time.setText(postItem.getTime().substring(0,16));
+                tv_in_post_time.setText(postItem.getCreateDate().substring(0,16));
                 tv_in_post_title.setText(postItem.getTitle());
                 tv_in_post_content.setText(postItem.getContent());
+
                 // LikeNum , commentNum 아직 추가 안했음.
                 break;
             default:
@@ -232,7 +250,8 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
     @Override
     public void freeBoardUpdateSuccess(CMRespDto cmRespDto) {
-        // todo 수정 했으니 freeboardActivity 로 이동 또는 원래 게시물 다시 시작
+        // 수정 했으니 freeboardActivity 로 이동 또는 원래 게시물 다시 시작
+        // 그 기능은 Call 통신 성공 함수 안에 있습니다 ( UpdatingActivity )
         Log.d(TAG, "freeBoardUpdateSuccess:  수정 성공");
         showCustomToast("글 수정 성공");
         //restartActivity(InPostActivity.this);

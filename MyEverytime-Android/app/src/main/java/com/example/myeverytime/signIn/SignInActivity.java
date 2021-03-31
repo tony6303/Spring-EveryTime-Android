@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.example.myeverytime.BaseActivity;
 import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.MainActivity;
+import com.example.myeverytime.MainActivityForFragment;
 import com.example.myeverytime.R;
 import com.example.myeverytime.signIn.interfaces.SignInActivityView;
 import com.example.myeverytime.signIn.model.SignInDto;
@@ -138,7 +139,7 @@ public class SignInActivity extends BaseActivity implements SignInActivityView {
                 showCustomToast("로그인 성공");
                 Log.d(TAG, "signInSuccess: 로그인 성공 code 100");
 
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                Intent intent = new Intent(SignInActivity.this, MainActivityForFragment.class);
                 startActivity(intent);
                 finish();
                 break;

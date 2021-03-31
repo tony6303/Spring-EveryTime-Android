@@ -16,11 +16,11 @@ import static com.example.myeverytime.ApplicationClass.getRetrofit;
 
 public class UpdatingService {
     private static final String TAG = "UpdatingService";
-    private final UpdatingActivityView updatingActivityView;
+    private final UpdatingActivityView mUpdatingActivityView;
     private InPostRetrofitInterface inPostRetrofitInterface;
 
-    public UpdatingService(UpdatingActivityView updatingActivityView) {
-        this.updatingActivityView = updatingActivityView;
+    public UpdatingService(UpdatingActivityView mUpdatingActivityView) {
+        this.mUpdatingActivityView = mUpdatingActivityView;
     }
     
     void postUpdating(Long id, UpdatingReqDto updatingReqDto){
@@ -32,10 +32,10 @@ public class UpdatingService {
                 CMRespDto updatingRespDto = response.body();
                 if(updatingRespDto == null){
                     Log.d(TAG, "onResponse: 글 수정 실패");
-                    updatingActivityView.validateFailure(null);
-                    return;
+                    mUpdatingActivityView.validateFailure(null);
+
                 }
-                updatingActivityView.UpdatingSuccess(updatingRespDto);
+                mUpdatingActivityView.UpdatingSuccess(updatingRespDto);
                 Log.d(TAG, "onResponse: 글 수정 성공");
             }
 

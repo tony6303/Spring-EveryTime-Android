@@ -20,7 +20,7 @@ import com.example.myeverytime.main.boards.model.PostItem;
 
 import java.util.ArrayList;
 
-public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.CustomViewHolder> {
+public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.BoardViewHolder> {
 
     private static final String TAG = "FreeBoardAdapter";
     private Context mContext;
@@ -44,7 +44,7 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Cust
     }
 
     public String getBoardTime(int position){
-        return post_item_list.get(position).getTime().substring(0,16);
+        return post_item_list.get(position).getCreateDate().substring(0,10) +" "+ post_item_list.get(position).getCreateDate().substring(11,16);
     }
 
     // nickname
@@ -54,17 +54,18 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Cust
 
     @NonNull
     @Override
-    public FreeBoardAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FreeBoardAdapter.BoardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_summarized_post, parent, false);
-        CustomViewHolder holder = new CustomViewHolder(view);
+        BoardViewHolder holder = new BoardViewHolder(view);
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FreeBoardAdapter.CustomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FreeBoardAdapter.BoardViewHolder holder, int position) {
 
+        Log.d(TAG, "onBindViewHolder: getBoardTime : " + getBoardTime(position));
         holder.tv_item_post_title.setText(getBoardTitle(position));
         holder.tv_item_post_content.setText(getBoardContent(position));
         holder.tv_item_post_time.setText(getBoardTime(position));
@@ -92,7 +93,7 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Cust
         return (null != post_item_list ? post_item_list.size() : 0);
     }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public class BoardViewHolder extends RecyclerView.ViewHolder {
 
         protected int content_index;
         protected TextView tv_item_post_title;
@@ -104,7 +105,7 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Cust
         protected LinearLayout free_board_item;
 
 
-        public CustomViewHolder(@NonNull final View itemView) {
+        public BoardViewHolder(@NonNull final View itemView) {
 
             super(itemView);
             this.tv_item_post_title = itemView.findViewById(R.id.tv_item_post_title);

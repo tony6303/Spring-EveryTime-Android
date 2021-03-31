@@ -17,7 +17,4 @@
     <item android:title="글 쓰기"
         android:id="@+id/write_post" />
 
-    <item android:title="즐겨찾기에서 삭제"
-        android:id="@+id/remove_from_favorite" />
-
 </menu>

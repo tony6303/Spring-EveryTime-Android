@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyEverytime"
         android:usesCleartextTraffic="true">
-        <activity android:name=".main.boards.updating.UpdatingActivity"></activity>
-        <activity android:name=".main.boards.in_post.InPostActivity"></activity>
+        <activity android:name=".MainActivityForFragment"></activity>
+        <activity android:name=".main.boards.updating.UpdatingActivity" />
+        <activity android:name=".main.boards.in_post.InPostActivity" />
         <activity android:name=".main.boards.writing.WritingActivity" />
         <activity android:name=".main.boards.freeboard.FreeBoardActivity" />
         <activity android:name=".MainActivity" />

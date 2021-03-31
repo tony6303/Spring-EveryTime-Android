@@ -1,13 +1,12 @@
 package com.cos.everytimeandroid.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.cos.everytimeandroid.web.user.dto.LoginDto;
 
-
-@Repository
-public interface UserRepository extends JpaRepository<User, Long>{
+@Repository 
+public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	// 로그인여부 확인 방법
 	// 1. namingQuery
@@ -15,4 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	// select * from user where username = ? and password = ?
 	User findByUsernameAndPassword(String username, String password);
 	
+	// select * from user where username = 'test';
+	// 로그인에 이용한 id로 user객체를 가져옴
+	@Query(value = "SELECT * FROM user WHERE username = :username", nativeQuery = true)
+	User findUserByUsername(String username); 
 }
