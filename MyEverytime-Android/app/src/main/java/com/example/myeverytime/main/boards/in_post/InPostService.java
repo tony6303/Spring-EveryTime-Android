@@ -63,7 +63,22 @@ public class InPostService {
         });
     }
 
-    void getExactFreePost(){
+    public void principalCheck(Long boardId, Long userId){
+        inPostRetrofitInterface = getRetrofit().create(InPostRetrofitInterface.class);
+        Call<CMRespDto<Void>> principalCheckCall = inPostRetrofitInterface.principalCheck(boardId, userId);
+        principalCheckCall.enqueue(new Callback<CMRespDto<Void>>() {
+            @Override
+            public void onResponse(Call<CMRespDto<Void>> call, Response<CMRespDto<Void>> response) {
+                CMRespDto cmRespDto = response.body();
+                Log.d(TAG, "onResponse: cmRespDto: " + cmRespDto);
+                mInPostActivityView.principalCheckSuccess(cmRespDto);
+                Log.d(TAG, "onResponse: 글 수정 본인 여부 통신 성공");
+            }
 
+            @Override
+            public void onFailure(Call<CMRespDto<Void>> call, Throwable t) {
+                Log.d(TAG, "onFailure: 글 수정 본인 여부 구조적으로 실패");
+            }
+        });
     }
 }

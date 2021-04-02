@@ -19,6 +19,9 @@ public interface InPostRetrofitInterface {
     @DELETE("board/{boardId}/user/{userId}")
     Call<CMRespDto<Void>> deleteOneFreeBoard(@Path("boardId") Long boardId, @Path("userId")Long userId);
 
-    @PUT("board/{boardId}")
-    Call<CMRespDto<UpdatingReqDto>> updateFreeBoard(@Path("boardId") Long boardId, @Body UpdatingReqDto updatingReqDto);
+    @PUT("board/{boardId}/user/{userId}")
+    Call<CMRespDto<UpdatingReqDto>> updateFreeBoard(@Path("boardId") Long boardId, @Path("userId") Long userId , @Body UpdatingReqDto updatingReqDto);
+
+    @GET("board/{boardId}/user/{userId}")
+    Call<CMRespDto<Void>> principalCheck(@Path("boardId") Long boardId, @Path("userId") Long userId);
 }

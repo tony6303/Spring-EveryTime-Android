@@ -61,8 +61,22 @@ public class BoardController {
 		
 	}
 	
-	@PutMapping("/board/{boardId}")
-	public CMRespDto<?> updateById(@PathVariable Long boardId, @RequestBody Board board){
-		return new CMRespDto<>(100, boardService.글수정하기(boardId, board));
+	@PutMapping("/board/{boardId}/user/{userId}")
+	public CMRespDto<?> updateById(@PathVariable Long boardId, @PathVariable Long userId, @RequestBody Board board){
+		if(boardRepository.findById(boardId).get().getUser() == userRepository.findById(userId).get()) {
+			return new CMRespDto<>(100, boardService.글수정하기(boardId, board));
+		}else {
+			return new CMRespDto<>(-1, null);
+		}
+	}
+	
+	@GetMapping("/board/{boardId}/user/{userId}")
+	public CMRespDto<?> principalCheck(@PathVariable Long boardId, @PathVariable Long userId){
+		if(boardRepository.findById(boardId).get().getUser() == userRepository.findById(userId).get()) {
+			return new CMRespDto<>(100, null);
+		}else {
+			return new CMRespDto<>(-1, null);
+		}
+		
 	}
 }

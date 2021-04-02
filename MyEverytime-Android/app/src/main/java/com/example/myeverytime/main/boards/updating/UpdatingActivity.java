@@ -2,6 +2,7 @@ package com.example.myeverytime.main.boards.updating;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,14 +18,14 @@ import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.R;
 import com.example.myeverytime.main.boards.freeboard.FreeBoardActivity;
 import com.example.myeverytime.main.boards.interfaces.UpdatingActivityView;
-import com.example.myeverytime.main.boards.model.PostItem;
 import com.example.myeverytime.main.boards.updating.model.UpdatingReqDto;
-import com.example.myeverytime.main.boards.writing.WritingActivity;
-import com.example.myeverytime.main.boards.writing.WritingService;
+
+import static com.example.myeverytime.SharedPreference.getAttributeLong;
 
 public class UpdatingActivity extends BaseActivity implements UpdatingActivityView {
 
     private static final String TAG = "UpdatingActivity";
+    private Context mContext;
     private long mBackKeyPressedTime = 0;
     private Toast mToast;
 
@@ -34,7 +35,7 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
     private ImageView iv_updating_cancel;
     private CheckBox chk_writing_anonymous;
 
-    private Long id;
+    private Long boardId;
     private String updating_title;
     private String updating_content;
 
@@ -43,15 +44,16 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_updating);
 
+        mContext = this;
         Intent intent = getIntent();
         num_of_board_from = intent.getExtras().getInt("boardName");
-        id = intent.getLongExtra("freeBoardId", 0);
+        boardId = intent.getLongExtra("freeBoardId", 0);
         updating_title = intent.getExtras().getString("title");
         updating_content = intent.getExtras().getString("content");
 
-        Log.d(TAG, "onCreate: id:" + id);
-        Log.d(TAG, "onCreate: title" + updating_title);
-        Log.d(TAG, "onCreate: content" + updating_content);
+        Log.d(TAG, "onCreate: boardId: " + boardId);
+        Log.d(TAG, "onCreate: title: " + updating_title);
+        Log.d(TAG, "onCreate: content: " + updating_content);
 
         et_updating_title = findViewById(R.id.et_updating_title);
         et_updating_content = findViewById(R.id.et_updating_content);
@@ -76,7 +78,7 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
                     String input_title = et_updating_title.getText().toString();
                     String input_content = et_updating_content.getText().toString();
 
-                    tryPostUpdating(id, input_title, input_content);
+                    tryPostUpdating(boardId, getAttributeLong(mContext, "loginUserId"), input_title, input_content);
                 }
 
             }
@@ -88,12 +90,12 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
         });
     }
 
-    // 업데이트
-    private void tryPostUpdating(Long id, String title, String content) {
+    // 업데이트 서비스 호출 ( 작성자 본인 여부는 서버 BoardController 단에서 처리함 )
+    private void tryPostUpdating(Long boardId, Long userId, String title, String content) {
         UpdatingReqDto updatingReqDto = new UpdatingReqDto(title, content);
 
         final UpdatingService updatingService = new UpdatingService(this);
-        updatingService.postUpdating(id, updatingReqDto);
+        updatingService.postUpdating(boardId, userId, updatingReqDto);
     }
 
     // UpdatingActivityView 인터페이스 구현

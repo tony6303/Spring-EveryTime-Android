@@ -29,11 +29,16 @@ spring:
 회원가입 ( SignUp )  
 로그인 ( SignIn ) 
 로그인정보 기억하기 ( SharedPreference )  
+댓글 작성 후 키보드 내리기  
+커스텀 다이얼로그  
   
 게시판 CRUD ( retrofit Call 함수 이름 )  
 글 전체 조회 ( getFreeBoard )  
 글 한 개 조회 ( getOneFreeBoard )  
 글 저장 ( saveFreeBoard )  
-글 삭제 ( deleteOneFreeBoard )  
-글 수정 ( updateFreeBoard )
+글 삭제(작성자만 가능) ( deleteOneFreeBoard )  
+글 수정(작성자만 가능) ( updateFreeBoard )  
+  
+댓글 조회 ( getReply )  
+댓글 저장 ( saveReply )  
 

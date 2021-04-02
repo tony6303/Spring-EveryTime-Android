@@ -23,20 +23,21 @@ public class UpdatingService {
         this.mUpdatingActivityView = mUpdatingActivityView;
     }
     
-    void postUpdating(Long id, UpdatingReqDto updatingReqDto){
+    void postUpdating(Long boardId, Long userId, UpdatingReqDto updatingReqDto){
         inPostRetrofitInterface = getRetrofit().create(InPostRetrofitInterface.class);
-        Call<CMRespDto<UpdatingReqDto>> updateFreeBoardCall = inPostRetrofitInterface.updateFreeBoard(id, updatingReqDto);
+        Call<CMRespDto<UpdatingReqDto>> updateFreeBoardCall = inPostRetrofitInterface.updateFreeBoard(boardId, userId, updatingReqDto);
         updateFreeBoardCall.enqueue(new Callback<CMRespDto<UpdatingReqDto>>() {
             @Override
             public void onResponse(Call<CMRespDto<UpdatingReqDto>> call, Response<CMRespDto<UpdatingReqDto>> response) {
                 CMRespDto updatingRespDto = response.body();
+                Log.d(TAG, "onResponse: updatingRespDto: " + updatingRespDto);
                 if(updatingRespDto == null){
-                    Log.d(TAG, "onResponse: 글 수정 실패");
-                    mUpdatingActivityView.validateFailure(null);
+                    Log.d(TAG, "onResponse: 글 수정 실패1111");
+                    mUpdatingActivityView.validateFailure("널은안돼");
 
                 }
                 mUpdatingActivityView.UpdatingSuccess(updatingRespDto);
-                Log.d(TAG, "onResponse: 글 수정 성공");
+                Log.d(TAG, "onResponse: 글 수정 통신 성공");
             }
 
             @Override

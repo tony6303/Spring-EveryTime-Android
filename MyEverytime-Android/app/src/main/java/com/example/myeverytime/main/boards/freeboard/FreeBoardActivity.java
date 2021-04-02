@@ -52,6 +52,7 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
         rv_free_board.setLayoutManager(linear_layout_manager);
 
         m_post_item_list = new ArrayList<>();
+        free_board_adapter = new FreeBoardAdapter(getApplicationContext(), m_post_item_list);
         rv_free_board.setAdapter(free_board_adapter);
     }
 

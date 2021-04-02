@@ -28,7 +28,6 @@ import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.R;
 import com.example.myeverytime.main.boards.freeboard.FreeBoardActivity;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostActivityView;
-import com.example.myeverytime.main.boards.in_post.interfaces.InPostRetrofitInterface;
 import com.example.myeverytime.main.boards.in_post.reply.ReplyAdapter;
 import com.example.myeverytime.main.boards.in_post.reply.ReplyService;
 import com.example.myeverytime.main.boards.in_post.reply.interfaces.ReplyActivityView;
@@ -219,6 +218,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
         Button yesBtn = deleteDialog.findViewById(R.id.yesBtn);
         yesBtn.setOnClickListener(v -> {
+            // 삭제 서비스 호출 ( 작성자 본인 여부는 서버 BoardController 단에서 처리함 )
             InPostService inPostService = new InPostService(this);
             inPostService.tryDeleteBoard(boardId, getAttributeLong(mContext, "loginUserId"));
             deleteDialog.dismiss();
@@ -239,13 +239,8 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
             case R.id.post_update:
                 Log.d(TAG, "onMenuItemClick: 글 수정 버튼 누름");
-                Intent intent = new Intent(InPostActivity.this, UpdatingActivity.class);
-                intent.putExtra("boardName", 1);
-                intent.putExtra("freeBoardId", boardId);
-                intent.putExtra("title", tv_in_post_title.getText());
-                intent.putExtra("content", tv_in_post_content.getText());
-                startActivity(intent);
-                finish();
+                InPostService inPostService = new InPostService(this);
+                inPostService.principalCheck(boardId, getAttributeLong(mContext, "loginUserId"));
                 return true;
 
             default:
@@ -265,7 +260,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         Log.d(TAG, "validateFailure: 실패했네요");
     }
 
-    // DeleteActivityView 인터페이스 구현
+    // InPostActivityView 인터페이스 구현
     @Override
     public void DeleteSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
@@ -281,8 +276,6 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 });
                 dlg.show();
 
-                //showCustomToast("글 삭제 성공");
-
                 break;
             default:
                 AlertDialog.Builder dlg2 = new AlertDialog.Builder(InPostActivity.this);
@@ -293,6 +286,34 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 });
                 dlg2.show();
                 Log.d(TAG, "DeleteSuccess: code: " + cmRespDto.getCode());
+                break;
+        }
+    }
+
+    @Override
+    public void principalCheckSuccess(CMRespDto cmRespDto) {
+        switch (cmRespDto.getCode()) {
+            case 100:
+                Log.d(TAG, "principalCheck: 글 수정 통신 성공 code 100");
+                Intent intent = new Intent(InPostActivity.this, UpdatingActivity.class);
+                intent.putExtra("boardName", 1);
+                intent.putExtra("freeBoardId", boardId);
+                intent.putExtra("title", tv_in_post_title.getText());
+                intent.putExtra("content", tv_in_post_content.getText());
+                startActivity(intent);
+                finish();
+
+
+                break;
+            default:
+                AlertDialog.Builder dlg2 = new AlertDialog.Builder(InPostActivity.this);
+                dlg2.setTitle("에브리타임");
+                dlg2.setMessage("작성자가 아니면 수정할 수 없습니다.");
+                dlg2.setPositiveButton("확인", (dialog, which) -> {
+
+                });
+                dlg2.show();
+                Log.d(TAG, "principalCheck: code: " + cmRespDto.getCode());
                 break;
         }
     }
