@@ -10,5 +10,5 @@ public interface InPostActivityView {
 
     void freeBoardSuccess(CMRespDto cmRespDto);
 
-    void freeBoardUpdateSuccess(CMRespDto cmRespDto);
+    void DeleteSuccess(CMRespDto cmRespDto);
 }

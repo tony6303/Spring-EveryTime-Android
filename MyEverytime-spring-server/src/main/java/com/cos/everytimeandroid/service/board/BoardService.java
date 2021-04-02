@@ -26,20 +26,19 @@ public class BoardService {
 		return boardRepository.save(board);		
 	}
 
-	public Board 글상세보기(Long id) {
-		return boardRepository.findById(id).get();
+	public Board 글상세보기(Long boardId) {
+		return boardRepository.findById(boardId).get();
 	}
 	
 	@Transactional
-	public void 글삭제하기(Long id) {
-		boardRepository.deleteById(id);
-		
+	public void 글삭제하기(Long boardId) {
+		boardRepository.deleteById(boardId);
 	}
 	
 	@Transactional
-	public Board 글수정하기(Long id, Board board) {
+	public Board 글수정하기(Long boardId, Board board) {
 		// 1. 영속화		
-		Board boardEntity = boardRepository.findById(id).get();
+		Board boardEntity = boardRepository.findById(boardId).get();
 		
 		// 2. 영속화 된 객체를 수정
 		boardEntity.setTitle(board.getTitle());

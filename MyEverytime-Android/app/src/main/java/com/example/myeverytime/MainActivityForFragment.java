@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,9 +21,13 @@ import com.example.myeverytime.user.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import static com.example.myeverytime.SharedPreference.getAttribute;
+import static com.example.myeverytime.SharedPreference.setAttribute;
+import static com.example.myeverytime.SharedPreference.getAttributeLong;
+import static com.example.myeverytime.SharedPreference.setAttributeLong;
 
 public class MainActivityForFragment extends AppCompatActivity implements UserActivityView {
     private static final String TAG = "MainActivityForFragment";
+    private Context mContext;
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
     // 5개의 메뉴에 들어갈 Fragment들
@@ -39,6 +44,7 @@ public class MainActivityForFragment extends AppCompatActivity implements UserAc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_for_fragment);
 
+        mContext = this;
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
         //첫 화면 지정
@@ -78,6 +84,7 @@ public class MainActivityForFragment extends AppCompatActivity implements UserAc
         });
 
 
+        // 로그인 할 때 작성 했던 username 값으로 findByUsername 해서 User 객체를 받아 와서 preference 에 저장함.
         tryGetUser(getAttribute(getApplicationContext(), "loginId"));
     }
 
@@ -88,16 +95,19 @@ public class MainActivityForFragment extends AppCompatActivity implements UserAc
     }
 
 
+    // UserActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
 
     }
 
+    // UserActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
 
     }
 
+    // UserActivityView 인터페이스 구현
     @Override
     public void getUserSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
@@ -113,6 +123,11 @@ public class MainActivityForFragment extends AppCompatActivity implements UserAc
                 userEntity.setUniversity(getUserData.getUniversity());
                 userEntity.setEntranceYear(getUserData.getEntranceYear());
 
+                // 유저 정보 preference 로 관리 하는 곳
+                setAttributeLong(mContext,"loginUserId",getUserData.getId());
+                setAttribute(mContext,"loginUserNickname",getUserData.getNickname());
+
+                Log.d(TAG, "getUserSuccess: loginUserId: " + getAttributeLong(mContext, "loginUserId"));
                 Log.d(TAG, "getUserSuccess: userEntity: " + userEntity.toString());
         }
     }

@@ -4,13 +4,19 @@ package com.example.myeverytime.main.boards.in_post;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,38 +30,42 @@ import com.example.myeverytime.main.boards.freeboard.FreeBoardActivity;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostActivityView;
 import com.example.myeverytime.main.boards.in_post.interfaces.InPostRetrofitInterface;
 import com.example.myeverytime.main.boards.in_post.reply.ReplyAdapter;
+import com.example.myeverytime.main.boards.in_post.reply.ReplyService;
+import com.example.myeverytime.main.boards.in_post.reply.interfaces.ReplyActivityView;
 import com.example.myeverytime.main.boards.in_post.reply.model.Reply;
+import com.example.myeverytime.main.boards.in_post.reply.model.ReplySaveReqDto;
 import com.example.myeverytime.main.boards.model.PostItem;
 import com.example.myeverytime.main.boards.updating.UpdatingActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import static com.example.myeverytime.SharedPreference.getAttribute;
+import static com.example.myeverytime.SharedPreference.getAttributeLong;
 
-import static com.example.myeverytime.ApplicationClass.getRetrofit;
-
-public class InPostActivity extends BaseActivity implements InPostActivityView, PopupMenu.OnMenuItemClickListener {
+public class InPostActivity extends BaseActivity implements InPostActivityView, ReplyActivityView, PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = "InPostActivity";
-    private InPostRetrofitInterface inPostRetrofitInterface;
-    private InPostActivityView mInpostActivityView;
+    private Context mContext;
+    private Dialog deleteDialog;
 
     private ArrayList<Reply> m_reply_item_list;
     private RecyclerView rv_in_post_reply;
     private ReplyAdapter reply_adapter;
     private LinearLayoutManager linear_layout_manager;
 
-    private CheckBox chk_in_post_anonymous;
+    private CheckBox chk_in_reply_anonymous;
+    private Boolean anonymous_checked = true;
 
     private TextView tv_in_post_nickname, tv_in_post_time, tv_in_post_title, tv_in_post_content, tv_in_post_like_num, tv_in_post_comment_num, tv_in_post_scrap_num;
+
+    InputMethodManager imm;
 
     private InPostService inPostService;
     private String clicked;
 
-    private EditText et_in_post_comment;
-    private ImageView iv_in_post_register_comment;
+    private EditText et_in_post_reply;
+    private ImageView iv_in_post_register_reply;
 
     private int m_clicked_free_pos;
     private int m_clicked_secret_pos;
@@ -68,25 +78,26 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
     private boolean m_from_frag_home;
 
-    private Long id; // 삭제, 수정 하기위해서 어댑터에서 intent로 받아온 id
+    private Long boardId; // 삭제, 수정 하기위해서 어댑터에서 intent로 받아온 boardId ( FreeBoardAdapter 에서 intent로 받아옴 )
 
     public InPostActivity() {
     }
-
-    public InPostActivity(InPostActivityView mInpostActivityView) {
-        this.mInpostActivityView = mInpostActivityView;
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_in_post);
 
+        mContext = this;
+
+        // 커스텀 다이얼로그
+        deleteDialog = new Dialog(mContext);
+        deleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        deleteDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        deleteDialog.setContentView(R.layout.dialog_yes_no);
+
+        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); // 댓글 작성후 키보드 내려주기
         m_reply_item_list = new ArrayList<>();
-        for(int i=0; i<5; i++){
-            m_reply_item_list.add(new Reply("익명","댓글내용"+i,"8분전"));
-        }
 
         reply_adapter = new ReplyAdapter(m_reply_item_list);
         rv_in_post_reply = findViewById(R.id.rv_board_reply_list);
@@ -96,33 +107,40 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
         rv_in_post_reply.setAdapter(reply_adapter);
 
-
-
+        // 뷰 세팅
         ViewBinding();
 
+        // DB에 저장된 boardId 주고 받기
         Intent intent = getIntent();
-        id = intent.getLongExtra("freeBoardId", 0);
+        boardId = intent.getLongExtra("freeBoardId", 0); // ( FreeBoardAdapter 에서 intent로 받아옴 )
 
-        Log.d(TAG, "onCreate: item의 실제 Id 받았어요 :" + id);
-//        String title = intent.getExtras().getString("freeBoardTitle");
-//        String content = intent.getExtras().getString("freeBoardContent");
-//        String nickname = intent.getExtras().getString("freeBoardWriter");
-//        String time = intent.getExtras().getString("freeBoardTime");
+        // 댓글 익명 체크박스
+        chk_in_reply_anonymous.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                anonymous_checked = true;
+            }else {
+                anonymous_checked = false;
+            }
+        });
 
-//        tv_in_post_title.setText(title);
-//        tv_in_post_content.setText(content);
-//        tv_in_post_nickname.setText(nickname);
-//        tv_in_post_time.setText(time);
-        tryGetOneFreeBoard(id);
+        // 액티비티가 만들어지면서, 글 상세보기, 댓글목록 가져오기 실행
+        tryGetOneFreeBoard(boardId);
+        tryGetReply(boardId);
+
+        // 댓글 저장 버튼, EditText에 적혀진 값을 전송
+        iv_in_post_register_reply.setOnClickListener(v -> {
+            trySaveReply(boardId, et_in_post_reply.getText().toString());
+        });
 
     }
 
+    // 뷰 세팅
     public void ViewBinding() {
 
-        chk_in_post_anonymous = findViewById(R.id.chk_in_post_anonymous);
+        chk_in_reply_anonymous = findViewById(R.id.chk_in_reply_anonymous);
 
-        et_in_post_comment = findViewById(R.id.et_in_post_comment);
-        iv_in_post_register_comment = findViewById(R.id.iv_in_post_register_comment);
+        et_in_post_reply = findViewById(R.id.et_in_post_reply);
+        iv_in_post_register_reply = findViewById(R.id.iv_in_post_register_reply);
 
         tv_in_post_nickname = findViewById(R.id.tv_in_post_nickname);
         tv_in_post_time = findViewById(R.id.tv_in_post_time);
@@ -134,12 +152,38 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         tv_in_post_scrap_num = findViewById(R.id.tv_in_post_scrap_num);
     }
 
-    private void tryGetOneFreeBoard(Long id){
+    // 글 하나 상세 보기
+    private void tryGetOneFreeBoard(Long boardId){
         final InPostService inPostService = new InPostService(this);
-        inPostService.getOneFreeBoard(id);
+        inPostService.getOneFreeBoard(boardId);
+    }
+
+    // 댓글 저장, 글쓴이 여부는 서버단 ReplyController 에서 구분함
+    private void trySaveReply(Long boardId, String content){
+        imm.hideSoftInputFromWindow(et_in_post_reply.getWindowToken(), 0);
+        et_in_post_reply.setText("");
+        ReplySaveReqDto replySaveReqDto = new ReplySaveReqDto(content);
+        if(anonymous_checked){
+            replySaveReqDto.setAnonymous(true);
+            replySaveReqDto.setNickname("익명");
+        }else{
+            replySaveReqDto.setAnonymous(false);
+            replySaveReqDto.setNickname(getAttribute(mContext, "loginUserNickname"));
+        }
+
+        final ReplyService replyService = new ReplyService(this);
+        replyService.saveReply(boardId , getAttributeLong(mContext, "loginUserId"), replySaveReqDto);
+    }
+
+    // 리사이클러 뷰 갱신
+    private void tryGetReply(Long boardId){
+        m_reply_item_list.clear();
+        final ReplyService replyService = new ReplyService(this);
+        replyService.getReply(boardId);
     }
 
 
+    // 뒤로가기, 더보기 버튼
     public void customOnClick2(View view) {
         switch (view.getId()) {
             case R.id.btn_in_post_go_back:
@@ -155,6 +199,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
 
     }
 
+    // 글 수정, 삭제 메뉴 팝업
     public void showPopUp(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
 
@@ -163,71 +208,141 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         popupMenu.show();
     }
 
+    // 커스텀 다이얼로그
+    public void showDeleteDialog(){
+        deleteDialog.show();
+
+        Button noBtn = deleteDialog.findViewById(R.id.noBtn);
+        noBtn.setOnClickListener(v -> {
+            deleteDialog.dismiss();
+        });
+
+        Button yesBtn = deleteDialog.findViewById(R.id.yesBtn);
+        yesBtn.setOnClickListener(v -> {
+            InPostService inPostService = new InPostService(this);
+            inPostService.tryDeleteBoard(boardId, getAttributeLong(mContext, "loginUserId"));
+            deleteDialog.dismiss();
+        });
+    }
+
+    // 서비스
+
+
+    // 팝업메뉴 인터페이스 구현
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.post_delete:
                 Log.d(TAG, "onMenuItemClick: 글 삭제 버튼 누름");
-                AlertDialog.Builder dlg = new AlertDialog.Builder(InPostActivity.this);
-                dlg.setTitle("에브리타임");
-                dlg.setMessage("글을 삭제 하시겠습니까?");
-                dlg.setPositiveButton("삭제", (dialog, which) -> {
-                    Log.d(TAG, "onMenuItemClick: 삭제 버튼");
-                    inPostRetrofitInterface = getRetrofit().create(InPostRetrofitInterface.class);
-                    Call<Void> deleteOneFreeBoardCall = inPostRetrofitInterface.deleteOneFreeBoard(id);
-                    deleteOneFreeBoardCall.enqueue(new Callback<Void>() {
-                        @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
-                            // 자꾸 mInpostActivityView가 null이라는 런타임에러가 발생해서 그냥 사용안함 (원인을 모르겠어서)
-                            // mInpostActivityView.freeBoardDeleteSuccess();
-                            Intent intent = new Intent(InPostActivity.this, FreeBoardActivity.class);
-                            startActivity(intent);
-                            finish();
-                            Log.d(TAG, "onResponse: 글 삭제  성공");
-                            showCustomToast("글 삭제 성공");
-                        }
-
-                        @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
-                            Log.d(TAG, "onFailure: 글 삭제 구조적으로 실패");
-                        }
-                    });
-
-                }) // dlg setPositive End
-                .setNegativeButton("취소", (dialog, which) -> {
-                    Log.d(TAG, "onMenuItemClick: 취소 버튼");
-                   dialog.cancel();
-                });
-                dlg.show();
-
+                showDeleteDialog();
                 return true;
 
             case R.id.post_update:
                 Log.d(TAG, "onMenuItemClick: 글 수정 버튼 누름");
                 Intent intent = new Intent(InPostActivity.this, UpdatingActivity.class);
                 intent.putExtra("boardName", 1);
-                intent.putExtra("freeBoardId", id);
+                intent.putExtra("freeBoardId", boardId);
                 intent.putExtra("title", tv_in_post_title.getText());
                 intent.putExtra("content", tv_in_post_content.getText());
                 startActivity(intent);
                 finish();
-
                 return true;
+
             default:
                 return false;
         }
     }
 
+    // InPostActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
 
     }
 
+    // InPostActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
         Log.d(TAG, "validateFailure: 실패했네요");
     }
 
+    // DeleteActivityView 인터페이스 구현
+    @Override
+    public void DeleteSuccess(CMRespDto cmRespDto) {
+        switch (cmRespDto.getCode()) {
+            case 100:
+                Log.d(TAG, "DeleteSuccess: 글 삭제 성공 code 100");
+                AlertDialog.Builder dlg = new AlertDialog.Builder(InPostActivity.this);
+                dlg.setTitle("에브리타임");
+                dlg.setMessage("글이 삭제 되었습니다.");
+                dlg.setPositiveButton("확인", (dialog, which) -> {
+                    Intent intent = new Intent(InPostActivity.this, FreeBoardActivity.class);
+                    startActivity(intent);
+                    finish();
+                });
+                dlg.show();
+
+                //showCustomToast("글 삭제 성공");
+
+                break;
+            default:
+                AlertDialog.Builder dlg2 = new AlertDialog.Builder(InPostActivity.this);
+                dlg2.setTitle("에브리타임");
+                dlg2.setMessage("작성자가 아니면 지울 수 없습니다.");
+                dlg2.setPositiveButton("확인", (dialog, which) -> {
+
+                });
+                dlg2.show();
+                Log.d(TAG, "DeleteSuccess: code: " + cmRespDto.getCode());
+                break;
+        }
+    }
+
+    // ReplyActivityView 인터페이스 구현
+    @Override
+    public void saveReplySuccess(CMRespDto cmRespDto) {
+        switch (cmRespDto.getCode()) {
+            case 100:
+                Log.d(TAG, "saveReplySuccess: 댓글 저장 성공 code 100");
+                showCustomToast("댓글 작성 성공");
+
+                tryGetReply(boardId);
+
+                break;
+            default:
+                showCustomToast("댓글 작성 실패");
+                break;
+        }
+    }
+
+    // ReplyActivityView 인터페이스 구현
+    @Override
+    public void getReplySuccess(CMRespDto cmRespDto) {
+        switch (cmRespDto.getCode()) {
+            case 100:
+                Log.d(TAG, "getReplySuccess: 댓글 조회 성공 code 100");
+                int num_of_reply_in_board = ((List<Reply>)cmRespDto.getData()).size();
+                for(int i=0; i< num_of_reply_in_board; i++){
+                    Reply getReplyItemData = ((List<Reply>)cmRespDto.getData()).get(i);
+                    Reply reply = new Reply();
+
+                    reply.setId(getReplyItemData.getId());
+                    reply.setContent(getReplyItemData.getContent());
+                    reply.setNickname(getReplyItemData.getNickname());
+                    reply.setAnonymous(getReplyItemData.getAnonymous());
+                    reply.setCreateDate(getReplyItemData.getCreateDate().substring(0,16));
+
+                    Log.d(TAG, "getReplySuccess: 데이터? :" + cmRespDto.getData());
+                    m_reply_item_list.add(reply);
+                }
+                reply_adapter.notifyDataSetChanged();
+                break;
+            default:
+                Log.d(TAG, "getReplySuccess: 코드가 100이 아님");
+                break;
+        }
+    }
+
+    // InPostActivityView 인터페이스 구현
     @Override
     public void freeBoardSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
@@ -235,7 +350,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 Log.d(TAG, "freeBoardSuccess: 글 한건 보기 성공 code 100");
                 PostItem postItem = (PostItem)cmRespDto.getData();
 
-                tv_in_post_nickname.setText(postItem.getWriter());
+                tv_in_post_nickname.setText(postItem.getNickname());
                 tv_in_post_time.setText(postItem.getCreateDate().substring(0,16));
                 tv_in_post_title.setText(postItem.getTitle());
                 tv_in_post_content.setText(postItem.getContent());
@@ -243,24 +358,8 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 // LikeNum , commentNum 아직 추가 안했음.
                 break;
             default:
-
+                Log.d(TAG, "freeBoardSuccess: 코드가 100이 아님");
                 break;
         }
-    }
-
-    @Override
-    public void freeBoardUpdateSuccess(CMRespDto cmRespDto) {
-        // 수정 했으니 freeboardActivity 로 이동 또는 원래 게시물 다시 시작
-        // 그 기능은 Call 통신 성공 함수 안에 있습니다 ( UpdatingActivity )
-        Log.d(TAG, "freeBoardUpdateSuccess:  수정 성공");
-        showCustomToast("글 수정 성공");
-        //restartActivity(InPostActivity.this);
-    }
-
-    private void restartActivity(Activity activity) {
-        Intent intent = new Intent();
-        intent.setClass(activity, activity.getClass());
-        activity.startActivity(intent);
-        activity.finish();
     }
 }

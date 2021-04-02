@@ -11,7 +11,6 @@ import android.widget.EditText;
 
 import com.example.myeverytime.BaseActivity;
 import com.example.myeverytime.CMRespDto;
-import com.example.myeverytime.MainActivity;
 import com.example.myeverytime.MainActivityForFragment;
 import com.example.myeverytime.R;
 import com.example.myeverytime.signIn.interfaces.SignInActivityView;
@@ -47,9 +46,15 @@ public class SignInActivity extends BaseActivity implements SignInActivityView {
             btn_signUp = findViewById(R.id.btn_logIn_signUp);
             auto_login_check = findViewById(R.id.auto_login_check);
 
+            // OnCreate 될때 preference를 보고 체크박스의 상태를 설정함.
             auto_login_check.setChecked(getAttributeBoolean(mContext, "loginChecked"));
-            et_mainLogin_userID.setText(getAttribute(mContext, "loginId"));
-            et_mainLogin_userPW.setText(getAttribute(mContext, "loginPw"));
+
+            // 체크박스의 상태가 true 이면 -> 정보를 저장중이다. 라는 뜻이므로 -> EditText를 set시켜줌
+            if(getAttributeBoolean(mContext, "loginChecked")) {
+                Log.d(TAG, "onCreate: 앱 껐다켰음! 정보 있음!");
+                et_mainLogin_userID.setText(getAttribute(mContext, "loginId"));
+                et_mainLogin_userPW.setText(getAttribute(mContext, "loginPw"));
+            }
 
             // 로그인 버튼을 누를 때
             btn_login.setOnClickListener(new View.OnClickListener() {
@@ -91,17 +96,21 @@ public class SignInActivity extends BaseActivity implements SignInActivityView {
                     removeAllAttribute(mContext); // sharedPreference 정보 모두 삭제
                 }
             });
+
     }
 
 
     private void tryPostSignIn(Boolean loginChecked, String inputID, String inputPW) {
         SignInDto signInDto = new SignInDto(inputID,inputPW);
-
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("userID", inputID);
-//        params.put("pw", inputPW);
         if(loginChecked){
+            // 체크박스가 true 이면 preference 에 true 로 저장한다.
             setAttributeBoolean(mContext, "loginChecked",true);
+            setAttribute(mContext,"loginId",inputID);
+            setAttribute(mContext, "loginPw",inputPW);
+            Log.d(TAG, "tryPostSignIn: shared에 로그인 기억");
+        }else{
+            // 체크박스가 false 이면 preference 에 false 로 저장한다.
+            setAttributeBoolean(mContext, "loginChecked",false);
             setAttribute(mContext,"loginId",inputID);
             setAttribute(mContext, "loginPw",inputPW);
             Log.d(TAG, "tryPostSignIn: shared에 로그인 기억");
@@ -109,33 +118,25 @@ public class SignInActivity extends BaseActivity implements SignInActivityView {
 
         final SignInService signInService = new SignInService(this);
         signInService.postSignIn(signInDto);
-
-
     }
 
-
+    // SignInActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
         showCustomToast(text);
     }
 
+    // SignInActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
         showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
     }
 
+    // SignInActivityView 인터페이스 구현
     @Override
     public void signInSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
             case 100:
-//                sSharedPreferences = getSharedPreferences("jwt", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sSharedPreferences.edit();
-//                editor.putString("jwt", signInResponse.getSignInResult().getJwt());
-//                editor.apply();
-//
-//                X_ACCESS_TOKEN =sSharedPreferences.getString ("jwt","");
-
-
                 showCustomToast("로그인 성공");
                 Log.d(TAG, "signInSuccess: 로그인 성공 code 100");
 

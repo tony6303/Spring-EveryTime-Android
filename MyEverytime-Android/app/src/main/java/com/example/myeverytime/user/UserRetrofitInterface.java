@@ -4,7 +4,6 @@ import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.user.model.User;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 

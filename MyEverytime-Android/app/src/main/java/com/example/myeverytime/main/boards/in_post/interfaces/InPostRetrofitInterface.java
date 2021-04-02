@@ -13,12 +13,12 @@ import retrofit2.http.Path;
 
 public interface InPostRetrofitInterface {
 
-    @GET("board/{id}")
-    Call<CMRespDto<PostItem>> getOneFreeBoard(@Path("id") Long id);
+    @GET("board/{boardId}")
+    Call<CMRespDto<PostItem>> getOneFreeBoard(@Path("boardId") Long boardId);
 
-    @DELETE("board/{id}")
-    Call<Void> deleteOneFreeBoard(@Path("id") Long id);
+    @DELETE("board/{boardId}/user/{userId}")
+    Call<CMRespDto<Void>> deleteOneFreeBoard(@Path("boardId") Long boardId, @Path("userId")Long userId);
 
-    @PUT("board/{id}")
-    Call<CMRespDto<UpdatingReqDto>> updateFreeBoard(@Path("id") Long id, @Body UpdatingReqDto updatingReqDto);
+    @PUT("board/{boardId}")
+    Call<CMRespDto<UpdatingReqDto>> updateFreeBoard(@Path("boardId") Long boardId, @Body UpdatingReqDto updatingReqDto);
 }

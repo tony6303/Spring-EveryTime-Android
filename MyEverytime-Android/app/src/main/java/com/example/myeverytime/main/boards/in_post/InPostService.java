@@ -22,9 +22,27 @@ public class InPostService {
         this.mInPostActivityView = inPostActivityView;
     }
 
-    public void getOneFreeBoard(Long id){
+    public void tryDeleteBoard(Long boardId, Long userId){
         inPostRetrofitInterface = getRetrofit().create(InPostRetrofitInterface.class);
-        Call<CMRespDto<PostItem>> getOneFreeBoardCall = inPostRetrofitInterface.getOneFreeBoard(id);
+        Call<CMRespDto<Void>> deleteOneFreeBoardCall = inPostRetrofitInterface.deleteOneFreeBoard(boardId, userId);
+        deleteOneFreeBoardCall.enqueue(new Callback<CMRespDto<Void>>() {
+            @Override
+            public void onResponse(Call<CMRespDto<Void>> call, Response<CMRespDto<Void>> response) {
+                CMRespDto cmRespDto = response.body();
+                mInPostActivityView.DeleteSuccess(cmRespDto);
+                Log.d(TAG, "onResponse: 글 삭제 통신 성공");
+            }
+
+            @Override
+            public void onFailure(Call<CMRespDto<Void>> call, Throwable t) {
+                Log.d(TAG, "onFailure: 글 삭제 구조적으로 실패");
+            }
+        });
+    }
+
+    public void getOneFreeBoard(Long boardId){
+        inPostRetrofitInterface = getRetrofit().create(InPostRetrofitInterface.class);
+        Call<CMRespDto<PostItem>> getOneFreeBoardCall = inPostRetrofitInterface.getOneFreeBoard(boardId);
         getOneFreeBoardCall.enqueue(new Callback<CMRespDto<PostItem>>() {
             @Override
             public void onResponse(Call<CMRespDto<PostItem>> call, Response<CMRespDto<PostItem>> response) {

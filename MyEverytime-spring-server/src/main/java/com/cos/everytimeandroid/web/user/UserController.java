@@ -1,4 +1,4 @@
-package com.cos.everytimeandroid.web.user.dto;
+package com.cos.everytimeandroid.web.user;
 
 import javax.servlet.http.HttpSession;
 
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cos.everytimeandroid.domain.user.User;
 import com.cos.everytimeandroid.service.user.UserService;
 import com.cos.everytimeandroid.web.dto.CMRespDto;
+import com.cos.everytimeandroid.web.user.dto.LoginDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
-	private final HttpSession session;
+//	private final HttpSession session; 불필요
 	
 	@PostMapping("/user")
 	public CMRespDto<?> save(@RequestBody User user){

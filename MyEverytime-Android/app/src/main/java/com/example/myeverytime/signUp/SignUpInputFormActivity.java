@@ -7,25 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myeverytime.BaseActivity;
 import com.example.myeverytime.CMRespDto;
-import com.example.myeverytime.MainActivity;
 import com.example.myeverytime.MainActivityForFragment;
 import com.example.myeverytime.R;
-import com.example.myeverytime.SharedPreference;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormActivityView;
 import com.example.myeverytime.signUp.model.SignUpDto;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.HashMap;
 
 public class SignUpInputFormActivity extends BaseActivity implements SignUpInputFormActivityView {
     private static final String TAG = "SignUpInputFormActivity";
@@ -56,7 +46,6 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
                         et_signup2_nickName.getText().toString().equals("") ||
                         et_signup2_univName.getText().toString().equals("") ||
                         et_signup2_univYear.getText().toString().equals("")) {
-                    // todo 토스트, 스낵바 직접 만들어서 써도 작동 하지 않네요.. System UI -> 메모리문제?
                     showCustomToast("모든 칸에 정보를 입력해주세요");
                     Log.d(TAG, "onClick: 정보 비우고 onclick");
                 } else if (!et_signup2_PW.getText().toString().equals(et_signup2_PW_again.getText().toString())) {
@@ -90,31 +79,23 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
     private void tryPostSignUp(String userID, String userPW, String email, String userNickname, String univName, String univYear) {
         SignUpDto signUpDto = new SignUpDto(userID, userPW, email, userNickname, univName, univYear);
 
-        SharedPreference.setAttribute(this, "nickname", signUpDto.getNickname());
-
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("userID", userID);
-//        params.put("pw", userPW);
-//        params.put("email", email);
-//        params.put("userNickname", userNickname);
-//        params.put("univName", univName);
-//        params.put("univYear", univYear);
-
         final SignUpInputFormService signUpInputForm_service = new SignUpInputFormService(this);
         signUpInputForm_service.postSignUp(signUpDto);
     }
 
-
+    // SignUpInputFormActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
         showCustomToast(text);
     }
 
+    // SignUpInputFormActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
         showCustomToast(message == null || message.isEmpty() ? getString(R.string.network_error) : message);
     }
 
+    // SignUpInputFormActivityView 인터페이스 구현
     @Override
     public void signUpSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {

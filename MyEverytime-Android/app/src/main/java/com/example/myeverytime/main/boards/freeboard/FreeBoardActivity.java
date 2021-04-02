@@ -52,26 +52,29 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
         rv_free_board.setLayoutManager(linear_layout_manager);
 
         m_post_item_list = new ArrayList<>();
-        free_board_adapter = new FreeBoardAdapter(getApplicationContext(), m_post_item_list);
         rv_free_board.setAdapter(free_board_adapter);
     }
 
+    // 게시판 전체 조회
     private void tryGetFreeBoard() {
 
         final FreeBoardService freeBoardService = new FreeBoardService(this);
         freeBoardService.getFreeBoard();
     }
 
+    // BoardActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
 
     }
 
+    // BoardActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
 
     }
 
+    // BoardActivityView 인터페이스 구현
     @Override
     public void boardSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
@@ -83,15 +86,18 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
 
                     //postItem.setContent_index(cmRespDto.getData().get(i).getContentIdx());
                     postItem.setId(getPostItemData.getId());
+                    postItem.setUserId(getPostItemData.getUserId());
                     postItem.setTitle(getPostItemData.getTitle());
                     postItem.setContent(getPostItemData.getContent());
                     postItem.setCreateDate(getPostItemData.getCreateDate());
-                    postItem.setWriter(getPostItemData.getWriter());
+                    postItem.setNickname(getPostItemData.getNickname());
                     postItem.setLike_num(getPostItemData.getLike_num());
                     postItem.setComment_num(getPostItemData.getComment_num());
 
                     m_post_item_list.add(postItem);
+                    Log.d(TAG, "boardSuccess: 자유게시판 데이터? :" + postItem);
                 }
+
                 free_board_adapter.notifyDataSetChanged();
                 break;
         }
@@ -100,13 +106,13 @@ public class FreeBoardActivity extends BaseActivity implements BoardActivityView
 
     public void customOnClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_free_board_go_back:
+            case R.id.iv_free_board_go_back: // 로비 화면으로 이동
                 onBackPressed();
                 break;
-            case R.id.iv_free_board_more:
+            case R.id.iv_free_board_more: // 글 쓰기 메뉴 열기
                 showPopUp(view);
                 break;
-            case R.id.iv_free_board_sync:
+            case R.id.iv_free_board_sync: // 글 목록 갱신
                 init();
                 tryGetFreeBoard();
                 break;

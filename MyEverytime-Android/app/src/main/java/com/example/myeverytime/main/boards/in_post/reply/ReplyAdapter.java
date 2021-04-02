@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,8 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
         private TextView tv_reply_nickname;
         private TextView tv_reply_content;
         private TextView tv_reply_create_date;
+        private ImageView iv_item_reply_more;
+        private ImageView iv_item_reply_like;
 
 
         public ReplyViewHolder(@NonNull View itemView) {
@@ -57,6 +60,13 @@ public class ReplyAdapter extends RecyclerView.Adapter<ReplyAdapter.ReplyViewHol
             tv_reply_nickname = itemView.findViewById(R.id.tv_item_reply_nickname);
             tv_reply_content = itemView.findViewById(R.id.tv_item_reply_content);
             tv_reply_create_date = itemView.findViewById(R.id.tv_item_reply_time);
+            iv_item_reply_more = itemView.findViewById(R.id.iv_item_reply_more);
+            iv_item_reply_like = itemView.findViewById(R.id.iv_item_reply_like);
+
+            iv_item_reply_more.setOnClickListener(v -> {
+
+
+            });
         }
 
         public void setReply(Reply reply){

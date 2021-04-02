@@ -94,41 +94,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
-
-        <ImageView
-            android:id="@+id/btn_writing_attach_photo"
-            android:layout_marginStart="6dp"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/icon_camera" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        <CheckBox
-            android:id="@+id/chk_writing_anonymous"
-            android:checked="true"
-            android:buttonTint="@color/colorEveryTimeRed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.7"
-            android:scaleY="0.7"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/activity_writing_anonymous"
-            android:textStyle="bold"
-            android:textColor="@color/colorEveryTimeRed"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-
 </LinearLayout>

@@ -49,9 +49,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_margin="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/reply_grey" />
 
                 <View
@@ -62,9 +61,9 @@
                     android:background="@color/colorLighterGrey" />
 
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_margin="5dp"
+                    android:id="@+id/iv_item_reply_like"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/like_grey" />
 
                 <View
@@ -75,9 +74,9 @@
                     android:background="@color/colorLighterGrey" />
 
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_margin="5dp"
+                    android:id="@+id/iv_item_reply_more"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/more_grey" />
             </LinearLayout>
 

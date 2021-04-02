@@ -281,7 +281,7 @@
             android:scaleY="0.7">
 
             <CheckBox
-                android:id="@+id/chk_in_post_anonymous"
+                android:id="@+id/chk_in_reply_anonymous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorEveryTimeRed"
@@ -297,7 +297,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/et_in_post_comment"
+            android:id="@+id/et_in_post_reply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -310,8 +310,7 @@
             android:textSize="13sp" />
 
         <ImageView
-            android:id="@+id/iv_in_post_register_comment"
-            android:onClick="customOnClick"
+            android:id="@+id/iv_in_post_register_reply"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="20dp"

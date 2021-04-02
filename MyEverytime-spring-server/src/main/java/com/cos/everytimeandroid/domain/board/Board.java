@@ -43,11 +43,13 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY )
     @JsonIgnoreProperties({"board"})
     private List<Reply> replys; 
-//    @ManyToOne
-//    @JoinColumn(name = "userId")
-//    private User user;
+    
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
      
-    private String writer = "익명"; 
+    private String nickname = "익명"; 
+    private Boolean anonymous;
     
     @ColumnDefault("0")
     private int like_num;

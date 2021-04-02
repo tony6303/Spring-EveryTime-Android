@@ -10,12 +10,13 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface FreeBoardRetrofitInterface {
 
     @GET("board")
     Call<CMRespDto<List<PostItem>>> getFreeBoard();
 
-    @POST("board")
-    Call<CMRespDto<WritingDto>> saveFreeboard(@Body WritingDto writingDto);
+    @POST("board/{userId}")
+    Call<CMRespDto<PostItem>> saveFreeboard(@Path ("userId") Long userId ,@Body WritingDto writingDto);
 }

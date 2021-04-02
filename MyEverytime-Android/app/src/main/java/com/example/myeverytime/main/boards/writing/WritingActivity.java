@@ -3,6 +3,7 @@ package com.example.myeverytime.main.boards.writing;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,8 +26,12 @@ import com.example.myeverytime.signIn.SignInActivity;
 
 import java.util.HashMap;
 
+import static com.example.myeverytime.SharedPreference.getAttribute;
+import static com.example.myeverytime.SharedPreference.getAttributeLong;
+
 public class WritingActivity extends BaseActivity implements WritingActivityView {
     private static final String TAG = "WritingActivity";
+    private Context mContext;
 
     private long mBackKeyPressedTime = 0;
     private Toast mToast;
@@ -36,12 +41,15 @@ public class WritingActivity extends BaseActivity implements WritingActivityView
     private EditText et_writing_title, et_writing_content;
     private ImageView iv_writing_cancel;
     private CheckBox chk_writing_anonymous;
+    private Boolean anonymous_checked = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
+        mContext = this;
 
+        // 게시판이 여러개 일 때 구분하려고 만든 int변수 .. (사용 안하는중)
         Intent intent = getIntent();
         num_of_board_from = intent.getExtras().getInt("boardName");
 
@@ -51,6 +59,8 @@ public class WritingActivity extends BaseActivity implements WritingActivityView
         chk_writing_anonymous = findViewById(R.id.chk_writing_anonymous);
 
         btn_writing_complete = findViewById(R.id.btn_writing_complete);
+
+        // 글쓰기 완료 버튼
         btn_writing_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,46 +80,55 @@ public class WritingActivity extends BaseActivity implements WritingActivityView
             }
         });
 
-
+        // 뒤로가기 버튼 ( 폰에 내장된 버튼과 같은 동작 )
         iv_writing_cancel.setOnClickListener(v -> {
-            Log.d(TAG, "onCreate: 클릭리스너 실행됨");
             onBackPressed();
+        });
+
+        // 글쓰기 익명 체크
+        chk_writing_anonymous.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                anonymous_checked = true;
+                Log.d(TAG, "onCreate: 글쓰기 익명 체크함");
+            }else{
+                anonymous_checked = false;
+                Log.d(TAG, "onCreate: 글쓰기 익명 해제함");
+            }
         });
     }
 
-
+    // 글쓰기 + 익명세팅
     private void tryPostWriting(String title, String content) {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("contentTitle", title);
-//        params.put("contentInf", content);
-//        params.put("userStatus", chk_writing_anonymous.isChecked() ? 0 : 1);
         WritingDto writingDto = new WritingDto(title, content);
+        if(anonymous_checked){
+            writingDto.setAnonymous(true);
+            writingDto.setNickname("익명");
+        }else{
+            writingDto.setAnonymous(false);
+            writingDto.setNickname(getAttribute(mContext, "loginUserNickname"));
+        }
 
         final WritingService writingService = new WritingService(this);
-        writingService.postWriting(writingDto);
+        writingService.postWriting(getAttributeLong(mContext,"loginUserId"), writingDto);
     }
 
-
+    // WritingActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
 
     }
 
+    // WritingActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
 
     }
 
+    // WritingActivityView 인터페이스 구현
     @Override
     public void WritingSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
             case 100:
-//                sSharedPreferences = getSharedPreferences("jwt", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sSharedPreferences.edit();
-//                editor.putString("jwt", signInResponse.getSignInResult().getJwt());
-//                editor.apply();
-//
-//                X_ACCESS_TOKEN =sSharedPreferences.getString ("jwt","");
                 showCustomToast("글쓰기 성공");
                 Log.d(TAG, "WritingSuccess: 글쓰기 성공 code 100");
 
@@ -119,9 +138,11 @@ public class WritingActivity extends BaseActivity implements WritingActivityView
                 break;
             default:
                 showCustomToast("글쓰기 실패");
+                Log.d(TAG, "WritingSuccess: 코드가 100이 아님");
                 break;
         }
     }
+
 
     @Override
     public void onBackPressed() {

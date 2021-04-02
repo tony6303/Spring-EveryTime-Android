@@ -62,6 +62,7 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
         et_updating_content.setText(updating_content);
 
         btn_updating_complete = findViewById(R.id.btn_updating_complete);
+        // 업데이트 완료 버튼
         btn_updating_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,44 +82,37 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
             }
         });
 
-
+        // 뒤로가기 버튼 ( 폰에 내장된 버튼과 같은 동작 )
         iv_updating_cancel.setOnClickListener(v -> {
-            Log.d(TAG, "onCreate: 클릭리스너 실행됨");
             onBackPressed();
         });
     }
 
+    // 업데이트
     private void tryPostUpdating(Long id, String title, String content) {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("contentTitle", title);
-//        params.put("contentInf", content);
-//        params.put("userStatus", chk_writing_anonymous.isChecked() ? 0 : 1);
         UpdatingReqDto updatingReqDto = new UpdatingReqDto(title, content);
 
         final UpdatingService updatingService = new UpdatingService(this);
         updatingService.postUpdating(id, updatingReqDto);
     }
 
+    // UpdatingActivityView 인터페이스 구현
     @Override
     public void validateSuccess(String text) {
 
     }
 
+    // UpdatingActivityView 인터페이스 구현
     @Override
     public void validateFailure(String message) {
 
     }
 
+    // UpdatingActivityView 인터페이스 구현
     @Override
     public void UpdatingSuccess(CMRespDto cmRespDto) {
         switch (cmRespDto.getCode()) {
             case 100:
-//                sSharedPreferences = getSharedPreferences("jwt", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sSharedPreferences.edit();
-//                editor.putString("jwt", signInResponse.getSignInResult().getJwt());
-//                editor.apply();
-//
-//                X_ACCESS_TOKEN =sSharedPreferences.getString ("jwt","");
                 showCustomToast("글수정 성공");
                 Log.d(TAG, "UpdatingSuccess: 글 수정 성공 code 100");
 

@@ -7,9 +7,6 @@ import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormActivityView;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormRetrofitInterface;
 import com.example.myeverytime.signUp.model.SignUpDto;
-
-import java.util.HashMap;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

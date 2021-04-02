@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -31,6 +33,10 @@ public class Reply {
 	private Long id;
 	
 	private String content;
+	
+	private String nickname;
+	
+	private Boolean anonymous;
 	
 	@ManyToOne // board(1) - reply(n)
 	@JoinColumn(name = "boardId")

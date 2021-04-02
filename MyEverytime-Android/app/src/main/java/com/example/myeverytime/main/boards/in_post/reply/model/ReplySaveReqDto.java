@@ -1,13 +1,11 @@
-package com.example.myeverytime.main.boards.writing.model;
+package com.example.myeverytime.main.boards.in_post.reply.model;
 
-public class WritingDto {
-    private String title;
-    private String content;
+public class ReplySaveReqDto {
     private String nickname;
+    private String content;
     private Boolean anonymous;
 
-    public WritingDto(String title, String content) {
-        this.title = title;
+    public ReplySaveReqDto(String content) {
         this.content = content;
     }
 
@@ -25,14 +23,6 @@ public class WritingDto {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {

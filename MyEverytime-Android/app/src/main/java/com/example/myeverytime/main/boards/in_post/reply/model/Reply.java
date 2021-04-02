@@ -1,26 +1,56 @@
 package com.example.myeverytime.main.boards.in_post.reply.model;
 
 public class Reply {
+    private Long id;
+    private Long userId;
     private String nickname;
     private String content;
     private String createDate;
+    private Boolean anonymous;
 
-    public Reply(String nickname, String content, String createDate) {
+    public Reply(String nickname, String content, Boolean anonymous) {
         this.nickname = nickname;
         this.content = content;
-        this.createDate = createDate;
+        this.anonymous = anonymous;
     }
 
     public Reply() {
     }
 
+
     @Override
     public String toString() {
         return "Reply{" +
-                "nickname='" + nickname + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", content='" + content + '\'' +
-                ", createDate='" + createDate + '\'' +
+                ", anonymous=" + anonymous +
                 '}';
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Boolean getAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(Boolean anonymous) {
+        this.anonymous = anonymous;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNickname() {

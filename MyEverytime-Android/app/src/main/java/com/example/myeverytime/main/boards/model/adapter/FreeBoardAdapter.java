@@ -48,8 +48,8 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Boar
     }
 
     // nickname
-    public String getBoardWriter(int position){
-        return post_item_list.get(position).getWriter();
+    public String getBoardNickname(int position){
+        return post_item_list.get(position).getNickname();
     }
 
     @NonNull
@@ -69,7 +69,7 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Boar
         holder.tv_item_post_title.setText(getBoardTitle(position));
         holder.tv_item_post_content.setText(getBoardContent(position));
         holder.tv_item_post_time.setText(getBoardTime(position));
-        holder.tv_item_post_nickname.setText(getBoardWriter(position));
+        holder.tv_item_post_nickname.setText(getBoardNickname(position));
         holder.tv_item_post_like_num.setText(Integer.toString(post_item_list.get(position).getLike_num()));
         holder.tv_item_post_comment_num.setText(Integer.toString(post_item_list.get(position).getComment_num()));
 
@@ -78,13 +78,6 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Boar
         /**
          * click 리스너 달 거면 여기에 달 것
          * */
-//        holder.itemView.setOnClickListener(v -> {
-//            Log.d(TAG, "onBindViewHolder: 아이템 클릭됨!");
-//            // new Intent(내위치 , 이동할 위치) 해야하는데 내위치 찾는법을 알아내야함. Context랑 관련있음
-//            // putExtra 해서 post_item 값들 다 넘겨줘야할듯.
-//            Intent intent = new Intent(mContext, InPostActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            mContext.startActivity(intent);
-//        });
 
     }
 
@@ -121,13 +114,9 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Boar
                 Log.d(TAG, "CustomViewHolder: 아이템 눌렀음! 어댑터번호" + getAdapterPosition());
                 Log.d(TAG, "CustomViewHolder: 실제 아이디" + getBoardId(getAdapterPosition()));
 
-
+                // 어댑터에서 액티비티로 이동하는 문법
                 Intent intent = new Intent(mContext, InPostActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("freeBoardId", getBoardId(getAdapterPosition()));
-//                intent.putExtra("freeBoardTitle", getBoardTitle(getAdapterPosition()));
-//                intent.putExtra("freeBoardContent", getBoardContent(getAdapterPosition()));
-//                intent.putExtra("freeBoardWriter", getBoardWriter(getAdapterPosition()));
-//                intent.putExtra("freeBoardTime", getBoardTime(getAdapterPosition()));
+                intent.putExtra("freeBoardId", getBoardId(getAdapterPosition())); // 삭제, 수정, 상세보기에 필요한 boardId
                 mContext.startActivity(intent);
                 ((Activity)v.getContext()).finish();
 

@@ -8,10 +8,11 @@ public class PostItem {
     private int content_index;
 
     private Long id;
+    private Long userId;
     private String title;
     private String content;
     private String createDate;
-    private String writer;
+    private String nickname;
     private int like_num;
     private int comment_num;
 
@@ -23,12 +24,32 @@ public class PostItem {
         this.content = content;
     }
 
+    @Override
+    public String
+    toString() {
+        return "PostItem{" +
+                " id=" + id +
+                ", userId='" + userId + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", nickname='" + nickname + '\'' +
+                '}';
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public int getContent_index() {
@@ -63,12 +84,12 @@ public class PostItem {
         this.content = content;
     }
 
-    public String getWriter() {
-        return writer;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public int getLike_num() {

@@ -24,7 +24,7 @@ public class User {
 
 	@Id //pk
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // autoIncrease
-	private Integer id;
+	private Long id;
 	
 	@Column(unique = true)
 	private String username;

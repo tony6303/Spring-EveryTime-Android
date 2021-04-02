@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository 
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<User, Long>{
 	
 	// 로그인여부 확인 방법
 	// 1. namingQuery

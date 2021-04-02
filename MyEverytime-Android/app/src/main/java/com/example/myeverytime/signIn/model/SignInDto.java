@@ -4,10 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class SignInDto {
 
-    //@SerializedName("loginUsername")
     private String loginUsername;
 
-    //@SerializedName("loginPw")
     private String loginPw;
 
     public SignInDto(String loginUsername, String loginPw) {
