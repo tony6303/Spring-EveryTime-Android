@@ -141,8 +141,8 @@ public class UpdatingActivity extends BaseActivity implements UpdatingActivityVi
 
             switch (num_of_board_from){
                 case 1:
-                    intent = new Intent(UpdatingActivity.this, FreeBoardActivity.class);
-                    startActivity(intent);
+//                    intent = new Intent(UpdatingActivity.this, FreeBoardActivity.class);
+//                    startActivity(intent);
                     finish();
                     break;
 //                case 2:

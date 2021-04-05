@@ -18,6 +18,8 @@ import com.example.myeverytime.main.boards.freeboard.FreeBoardActivity;
 import com.example.myeverytime.main.boards.in_post.InPostActivity;
 import com.example.myeverytime.main.boards.model.PostItem;
 
+import static com.example.myeverytime.SharedPreference.setAttributeLong;
+
 import java.util.ArrayList;
 
 public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.BoardViewHolder> {
@@ -117,6 +119,7 @@ public class FreeBoardAdapter extends RecyclerView.Adapter<FreeBoardAdapter.Boar
                 // 어댑터에서 액티비티로 이동하는 문법
                 Intent intent = new Intent(mContext, InPostActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("freeBoardId", getBoardId(getAdapterPosition())); // 삭제, 수정, 상세보기에 필요한 boardId
+                setAttributeLong(mContext,"freeBoardId", getBoardId(getAdapterPosition()));
                 mContext.startActivity(intent);
                 ((Activity)v.getContext()).finish();
 

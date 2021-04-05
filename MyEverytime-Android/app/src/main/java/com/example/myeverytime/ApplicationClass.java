@@ -7,8 +7,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApplicationClass {
-
-    public static String BASE_URL = "http://113.198.238.82:8000/";
+    // 192.168.0.4   113.198.238.82
+    public static String BASE_URL = "http://192.168.0.4:8000/";
 
     // Retrofit 인스턴스
     public static Retrofit retrofit;

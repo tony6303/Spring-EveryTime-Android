@@ -79,4 +79,25 @@ public class ReplyService {
             }
         });
     }
+
+
+    public void deleteReply(Long replyId, Long userId){
+        Log.d(TAG, "deleteReply: 댓글 삭제 통신중");
+        replyRetrofitInterface = getRetrofit().create(ReplyRetrofitInterface.class);
+        Call<CMRespDto<Void>> deleteReplyCall = replyRetrofitInterface.deleteReply(replyId, userId);
+        deleteReplyCall.enqueue(new Callback<CMRespDto<Void>>() {
+            @Override
+            public void onResponse(Call<CMRespDto<Void>> call, Response<CMRespDto<Void>> response) {
+                CMRespDto cmRespDto = response.body();
+                mReplyActivityView.deleteReplySuccess(cmRespDto);
+                Log.d(TAG, "onResponse: 댓글 삭제 통신 성공");
+            }
+
+            @Override
+            public void onFailure(Call<CMRespDto<Void>> call, Throwable t) {
+                mReplyActivityView.validateFailure("");
+                Log.d(TAG, "onFailure: 댓글 삭제 구조적으로 실패");
+            }
+        });
+    }
 }

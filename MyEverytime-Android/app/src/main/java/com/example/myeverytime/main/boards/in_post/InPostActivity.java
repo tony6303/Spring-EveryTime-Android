@@ -82,6 +82,11 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
     public InPostActivity() {
     }
 
+    public InPostActivity(ArrayList<Reply> m_reply_item_list, ReplyAdapter reply_adapter) {
+        this.m_reply_item_list = m_reply_item_list;
+        this.reply_adapter = reply_adapter;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,7 +103,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); // 댓글 작성후 키보드 내려주기
         m_reply_item_list = new ArrayList<>();
 
-        reply_adapter = new ReplyAdapter(m_reply_item_list);
+        reply_adapter = new ReplyAdapter(m_reply_item_list, mContext); // 오류 예상됨
         rv_in_post_reply = findViewById(R.id.rv_board_reply_list);
 
         linear_layout_manager = new LinearLayoutManager(getApplicationContext());
@@ -157,7 +162,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         inPostService.getOneFreeBoard(boardId);
     }
 
-    // 댓글 저장, 글쓴이 여부는 서버단 ReplyController 에서 구분함
+    // 댓글 저장, 작성, 글쓴이 여부는 서버단 ReplyController 에서 구분함
     private void trySaveReply(Long boardId, String content){
         imm.hideSoftInputFromWindow(et_in_post_reply.getWindowToken(), 0);
         et_in_post_reply.setText("");
@@ -175,7 +180,7 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
     }
 
     // 리사이클러 뷰 갱신
-    private void tryGetReply(Long boardId){
+    public void tryGetReply(Long boardId){
         m_reply_item_list.clear();
         final ReplyService replyService = new ReplyService(this);
         replyService.getReply(boardId);
@@ -186,10 +191,8 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
     public void customOnClick2(View view) {
         switch (view.getId()) {
             case R.id.btn_in_post_go_back:
-                Log.d(TAG, "customOnClick:  inpost 에서 뒤로가기 누름");
-                Intent intent = new Intent(InPostActivity.this, FreeBoardActivity.class);
-                startActivity(intent);
-                finish();
+                onBackPressed();
+
                 break;
             case R.id.btn_in_post_more:
                 showPopUp(view);
@@ -301,7 +304,6 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 intent.putExtra("title", tv_in_post_title.getText());
                 intent.putExtra("content", tv_in_post_content.getText());
                 startActivity(intent);
-                finish();
 
 
                 break;
@@ -363,6 +365,12 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
         }
     }
 
+    // ReplyActivityView 인터페이스 구현 -> ReplyAdapter 에서 하는중
+    @Override
+    public void deleteReplySuccess(CMRespDto cmRespDto) {
+
+    }
+
     // InPostActivityView 인터페이스 구현
     @Override
     public void freeBoardSuccess(CMRespDto cmRespDto) {
@@ -382,5 +390,13 @@ public class InPostActivity extends BaseActivity implements InPostActivityView, 
                 Log.d(TAG, "freeBoardSuccess: 코드가 100이 아님");
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed:  inpost 에서 뒤로가기 누름");
+        Intent intent = new Intent(InPostActivity.this, FreeBoardActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

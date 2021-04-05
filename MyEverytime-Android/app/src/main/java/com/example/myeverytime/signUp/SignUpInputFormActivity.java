@@ -1,5 +1,6 @@
 package com.example.myeverytime.signUp;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +15,12 @@ import com.example.myeverytime.BaseActivity;
 import com.example.myeverytime.CMRespDto;
 import com.example.myeverytime.MainActivityForFragment;
 import com.example.myeverytime.R;
+import com.example.myeverytime.signIn.SignInActivity;
 import com.example.myeverytime.signUp.interfaces.SignUpInputFormActivityView;
 import com.example.myeverytime.signUp.model.SignUpDto;
+
+import static com.example.myeverytime.SharedPreference.setAttribute;
+import static com.example.myeverytime.SharedPreference.setAttributeBoolean;
 
 public class SignUpInputFormActivity extends BaseActivity implements SignUpInputFormActivityView {
     private static final String TAG = "SignUpInputFormActivity";
@@ -105,7 +110,7 @@ public class SignUpInputFormActivity extends BaseActivity implements SignUpInput
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(SignUpInputFormActivity.this, MainActivityForFragment.class);
+                        Intent intent = new Intent(SignUpInputFormActivity.this, SignInActivity.class);
                         startActivity(intent);
                         finish();
                     }

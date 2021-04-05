@@ -41,4 +41,5 @@ spring:
   
 댓글 조회 ( getReply )  
 댓글 저장 ( saveReply )  
+댓글 삭제(작성자만 가능) ( deleteReply )  
 

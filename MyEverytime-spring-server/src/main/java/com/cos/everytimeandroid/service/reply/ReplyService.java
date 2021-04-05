@@ -23,4 +23,8 @@ public class ReplyService {
 	public List<Reply> 보드댓글전체보기(Long boardId) {
 		return replyRepository.findByBoardId(boardId);
 	}
+	
+	public void 댓글삭제하기(Long replyId) {
+		replyRepository.deleteById(replyId);
+	}
 }

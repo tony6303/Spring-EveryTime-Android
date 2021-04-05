@@ -25,10 +25,10 @@ public class WritingService {
 
     void postWriting(Long userId, WritingDto writingDto){
         freeBoardRetrofitInterface = getRetrofit().create(FreeBoardRetrofitInterface.class);
-        Call<CMRespDto<PostItem>> saveFreeBoardCall = freeBoardRetrofitInterface.saveFreeboard(userId, writingDto);
-        saveFreeBoardCall.enqueue(new Callback<CMRespDto<PostItem>>() {
+        Call<CMRespDto<WritingDto>> saveFreeBoardCall = freeBoardRetrofitInterface.saveFreeboard(userId, writingDto);
+        saveFreeBoardCall.enqueue(new Callback<CMRespDto<WritingDto>>() {
             @Override
-            public void onResponse(Call<CMRespDto<PostItem>> call, Response<CMRespDto<PostItem>> response) {
+            public void onResponse(Call<CMRespDto<WritingDto>> call, Response<CMRespDto<WritingDto>> response) {
                 CMRespDto writingRespDto = response.body();
                 if (writingRespDto.getData() == null){
                     Log.d(TAG, "onResponse: 글쓰기 실패");
@@ -41,7 +41,7 @@ public class WritingService {
             }
 
             @Override
-            public void onFailure(Call<CMRespDto<PostItem>> call, Throwable t) {
+            public void onFailure(Call<CMRespDto<WritingDto>> call, Throwable t) {
                 Log.d(TAG, "onFailure: 글쓰기 구조적으로 실패");
             }
         });

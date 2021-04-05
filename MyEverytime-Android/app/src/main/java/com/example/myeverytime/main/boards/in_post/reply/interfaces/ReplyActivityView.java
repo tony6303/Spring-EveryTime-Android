@@ -11,4 +11,6 @@ public interface ReplyActivityView {
     void saveReplySuccess(CMRespDto cmRespDto);
 
     void getReplySuccess(CMRespDto cmRespDto);
+
+    void deleteReplySuccess(CMRespDto cmRespDto);
 }
