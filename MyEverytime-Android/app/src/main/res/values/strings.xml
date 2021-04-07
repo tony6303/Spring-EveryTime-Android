@@ -187,7 +187,7 @@
     <string name="activity_writing_anonymous">익명</string>
 
     <!--    frag_home-->
-    <string name="frag_home_univ_name">소퀘대</string>
+    <string name="frag_home_univ_name">동의대</string>
     <string name="frag_home_univ_homepage">학교\n홈</string>
     <string name="frag_home_shuttle_bus">셔틀\n버스</string>
     <string name="frag_home_notification">학사\n공지</string>

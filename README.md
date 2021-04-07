@@ -25,7 +25,13 @@ spring:
 ```
 
 
-구현된 기능  
+# 구현된 기능  
+
+### 서버 기능  
+Schedule 어노테이션을 이용한 에러 로그 수집 ( 배치 프로그램 )  
+Junit 테스트 ( 회원가입'만' )  
+  
+### 안드로이드 기능
 회원가입 ( SignUp )  
 로그인 ( SignIn ) 
 로그인정보 기억하기 ( SharedPreference )  
@@ -42,4 +48,3 @@ spring:
 댓글 조회 ( getReply )  
 댓글 저장 ( saveReply )  
 댓글 삭제(작성자만 가능) ( deleteReply )  
-
