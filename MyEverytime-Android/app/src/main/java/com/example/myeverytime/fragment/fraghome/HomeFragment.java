@@ -25,12 +25,15 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        /* 
         button1 = (Button)view.findViewById(R.id.go_sign_in);
 
         button1.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), SignInActivity.class);
             startActivity(intent);
         });
+        */
+        
         // Inflate the layout for this fragment
         return view;
 
